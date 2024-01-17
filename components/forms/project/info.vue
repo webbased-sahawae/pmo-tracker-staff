@@ -88,6 +88,44 @@
           </div>
         </div>
       </div>
+      <div class="flex flex-col" v-if="trace?.ProgramId">
+        <label>Program KPI</label>
+        <select
+          @change="
+            (e) => {
+              // console.log(JSON.parse(e.target.value));
+              project.indicator = uniquePartner([
+                ...project.indicator,
+                JSON.parse(e.target.value),
+              ]);
+            }
+          "
+          class="text-white"
+        >
+          <option value="default" selected disabled id="defaultSelect">
+            Select KPI to Add
+          </option>
+          <option
+            v-for="item in ProgramIndicator"
+            :value="JSON.stringify(item)"
+          >
+            {{ item.description }}
+          </option>
+        </select>
+        <div>
+          <div
+            v-for="(item, index) in project.indicator"
+            class="hover:text-red-500 hover:cursor-pointer"
+            @click="
+              () => {
+                project.indicator.splice(index, 1);
+              }
+            "
+          >
+            {{ item.description }}
+          </div>
+        </div>
+      </div>
       <div class="flex flex-col">
         <div>
           <label>Public Relation Request</label>
@@ -152,9 +190,16 @@
         </div>
       </div>
     </div>
-    {{ project.info }}
+    <!-- {{ project.indicator }} -->
   </div>
 </template>
 <script setup>
+import { BASE_URL } from "~/constants/urls";
+import { uniquePartner } from "~/helpers/array";
+
 const { project } = useProject();
+const { trace } = useTrace();
+const { data: ProgramIndicator, status } = await useFetch(
+  `${BASE_URL}/indicator/${trace.value.ProgramId}`
+);
 </script>

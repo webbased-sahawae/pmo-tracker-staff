@@ -66,7 +66,7 @@ button:hover {
   border-radius: 9999px;
   border-width: 2px;
   border-color: #b91c1c;
-  width: 1.25rem;
+  width: auto;
   color: #b91c1c;
   transition-duration: 500ms;
   cursor: pointer;

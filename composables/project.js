@@ -6,6 +6,7 @@ export const useProject = () => {
       agenda: [],
       invitation: [],
       sinergy: [],
+      indicator: [],
     };
   });
 
