@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --host",
+    "devNiaga": "nuxt --hostname '0' --port 8000",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
