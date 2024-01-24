@@ -1,5 +1,7 @@
 <template>
-  <button type="button" @click="navButton">Start</button>
+  <div>
+    <button type="button" @click="navButton">Start</button>
+  </div>
 </template>
 
 <script setup>
