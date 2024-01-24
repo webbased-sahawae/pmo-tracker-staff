@@ -1,5 +1,21 @@
 <template>
   <div>
+    <!-- {{ trace }} -->
+    <select
+      @change="
+        (e) => {
+          navigateTo(`/program/${e.target.value}`);
+        }
+      "
+    >
+      <option
+        v-for="item in PartnerList"
+        :value="item.id"
+        :selected="PartnerId == item.id"
+      >
+        {{ item.name }}
+      </option>
+    </select>
     <div class="flex flex-col items-center gap-2">
       <h1 class="line-none">{{ PartnerDetail.name }}</h1>
       <span class="italic line-none">{{ PartnerDetail.chief }}</span>
@@ -28,7 +44,6 @@
 import { BASE_URL } from "~/constants/urls.js";
 const { PartnerId } = useRoute().params;
 const { trace } = useTrace();
-
 trace.value = { ...trace.value, PartnerId };
 trace.value.ProgramId && delete trace.value.ProgramId;
 const { data: ProgramPartner } = await useFetch(
@@ -36,5 +51,9 @@ const { data: ProgramPartner } = await useFetch(
 );
 const { data: PartnerDetail } = await useFetch(
   `${BASE_URL}/partner/${PartnerId}`
+);
+
+const { data: PartnerList } = await useFetch(
+  `${BASE_URL}/partner/institution/14a870b2-6f40-4120-9c3f-2d7c2379442d`
 );
 </script>

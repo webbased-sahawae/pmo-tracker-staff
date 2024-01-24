@@ -1,10 +1,13 @@
 <template>
   <div class="relative">
+    {{ searchResultOpen }}
+    {{ search }}
     <input
-      @focus="searcValueBox = true"
+      @focus="searchResultOpen.search = true"
+      @blur="searchResultOpen.search = false"
       type="text"
       list="browsers"
-      class="w-full"
+      class="w-full px-2"
       @keyup="
         (e) => {
           searchFuntion(e.target.value);
@@ -17,18 +20,21 @@
       :class="`flex flex-col mt-2 absolute child bg-white w-full  ${
         !searchResult?.value?.length && 'hidden'
       }  ${
-        !searcValueBox && 'hidden'
-      } rounded-2xl max-h-[25vw] overflow-scroll`"
+        !searchResultOpen.result && !searchResultOpen.search && 'hidden'
+      } rounded-2xl max-h-[25vh] overflow-y-auto`"
     >
       <div
         v-for="item in searchResult.value"
         class="whitespace-normal hover:bg-blue-700 hover:text-white hover:cursor-pointer px-4 rounded-full duration-500"
         @click="chooseResult(item)"
+        @mouseover="searchResultOpen.result = true"
+        @mouseout="searchResultOpen.result = false"
       >
         <span class="font-bold">
-          {{ item[titleField] }}
+          {{ item.name }}
         </span>
-        <div class="italic">{{ item[descriptionField] }}</div>
+        <div class="">{{ item.Partner.name }}</div>
+        <div class="italic" v-if="item.position">{{ item.position }}</div>
       </div>
     </div>
     {{ searchResult?.value?.length }}
@@ -36,27 +42,23 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
+import { uniqueArrayWithFilter } from "~/helpers/array.js";
 
-const { apiRoute, setValue, titleField, descriptionField } = defineProps([
-  "apiRoute",
-  "setValue",
-  "titleField",
-  "descriptionField",
-]);
+const { setValue } = defineProps(["setValue"]);
 const search = ref("");
 const searchResult = ref([]);
 const searchFuntion = async (searchValue) => {
-  if (search.value.length > 2) {
-    const { data: partners, status } = await useFetch(
-      `${BASE_URL}${apiRoute}${searchValue}`
+  if (search.value.length > 1) {
+    const { data: users, status } = await useFetch(
+      `${BASE_URL}/user/search/${searchValue}`
     );
-    searchResult.value = partners;
+    searchResult.value = users;
   } else searchResult.value = [];
 };
-const searcValueBox = ref(false);
+const searchResultOpen = ref({ search: false, result: false });
 
 const chooseResult = (item) => {
-  setValue.push(item);
-  console.log(setValue);
+  uniqueArrayWithFilter(setValue, item.id);
+  searchResultOpen.value.result = false;
 };
 </script>

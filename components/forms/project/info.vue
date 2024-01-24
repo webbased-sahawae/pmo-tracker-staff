@@ -1,5 +1,13 @@
 <template>
   <div class="">
+    <div>
+      <div>Program Relation</div>
+      <div>
+        <select @change="setProgram">
+          <option>asd</option>
+        </select>
+      </div>
+    </div>
     <div class="flex gap-2 flex-col">
       <div class="flex flex-col">
         <label>Project name</label
@@ -37,24 +45,18 @@
           :value="project.info.type"
           @change="
             (e) => {
-              project.info.type = e.target.value;
+              project.info.CategoryId = e.target.value;
             }
           "
         >
           <option disabled selected>Please choose the project type</option>
-          <option value="seminar">Seminar</option>
-          <option value="training">Training</option>
-          <option value="rapat">Rapat</option>
-          <option value="forum">Forum</option>
-          <option value="expo">Expo</option>
-          <option value="undangan">Undangan</option>
-          <option value="festival">Festival</option>
-          <option value="event">Event</option>
-          <option value="fgd">FGD</option>
+          <option v-for="item in categories" :value="item.id">
+            {{ item.name }}
+          </option>
         </select>
       </div>
       <div class="flex flex-col">
-        <div class="flex gap-4 p-2">
+        <div class="flex gap-4 p-2 flex-wrap">
           <div class="flex">
             <h3 class="me-2">Start</h3>
             <div>
@@ -94,7 +96,7 @@
           @change="
             (e) => {
               // console.log(JSON.parse(e.target.value));
-              project.indicator = uniquePartner([
+              project.indicator = uniqueArray([
                 ...project.indicator,
                 JSON.parse(e.target.value),
               ]);
@@ -195,11 +197,16 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-import { uniquePartner } from "~/helpers/array";
+import { uniqueArray } from "~/helpers/array";
 
 const { project } = useProject();
 const { trace } = useTrace();
 const { data: ProgramIndicator, status } = await useFetch(
   `${BASE_URL}/indicator/${trace.value.ProgramId}`
 );
+const { data: categories, status: statusCategories } = await useFetch(
+  `${BASE_URL}/category`
+);
+
+const setProgram = () => {};
 </script>

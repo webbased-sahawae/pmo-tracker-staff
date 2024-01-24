@@ -93,7 +93,7 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-import { uniquePartner } from "~/helpers/array";
+import { uniqueArray } from "~/helpers/array";
 
 const { activity } = useActivity();
 </script>

@@ -1,7 +1,7 @@
 Nama Aktifitas
 Attandance
 tempat,tanggal
-agenda
+rundown
 Hasil
 Action => goes to new project creation
 

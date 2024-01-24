@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-6">
     <div>
-      <FormsProjectAgenda />
+      <FormsProjectRundown />
     </div>
     <div class="primeBox p-4 flex flex-col gap-2">
       <table class="hidden md:table w-full table-auto">
@@ -9,12 +9,12 @@
           <th>No</th>
           <th>Date</th>
           <th>Time</th>
-          <th>Agenda</th>
+          <th>Rundown</th>
           <th>Location</th>
           <th>Speaker / Moderator</th>
           <th>Notes</th>
         </tr>
-        <tr v-for="(item, index) in project.agenda" :data="item">
+        <tr v-for="(item, index) in project.rundown" :data="item">
           <td class="text-center">{{ index + 1 }}</td>
           <td class="text-center">{{ dateConvert(item.start).date }}</td>
           <td class="text-center">
@@ -27,7 +27,7 @@
           <td class="text-center long-cell">{{ item.notes }}</td>
         </tr>
       </table>
-      <CardsAgenda v-for="item in project.agenda" :data="item" />
+      <CardsRundown v-for="item in project.rundown" :data="item" />
     </div>
   </div>
 </template>

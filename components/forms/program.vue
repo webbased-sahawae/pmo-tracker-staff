@@ -290,35 +290,44 @@
         />
       </div>
     </div>
-    <div class="flex max-w-[100vw] gap-4">
-      <button
-        class="buttonAdd"
-        style="width: 100%"
-        type="submit"
-        @click="submitProgram"
-      >
-        Submit
-      </button>
-      <button
-        class="buttonDelete"
-        style="width: 100%"
-        type="button"
-        :onclick="
-          () => {
-            navigateTo(`/program/${trace.PartnerId}`);
-          }
-        "
-      >
-        Cancel
-      </button>
+    <div>
+      <!-- {{ stayPage }} -->
+      <div @click="stayPage = !stayPage" class="cursor-pointer">
+        <input type="checkbox" :checked="stayPage" />
+        Stay on this page after submit
+      </div>
+      <div class="flex max-w-[100vw] gap-4">
+        <button
+          class="buttonAdd"
+          style="width: 100%"
+          type="submit"
+          @click="submitProgram"
+        >
+          Submit
+        </button>
+        <button
+          class="buttonDelete"
+          style="width: 100%"
+          type="button"
+          :onclick="
+            () => {
+              navigateTo(`/program/${trace.PartnerId}`);
+            }
+          "
+        >
+          Cancel
+        </button>
+      </div>
     </div>
-    {{ addProgram }}
+    <!-- {{ addProgram }} -->
   </div>
 </template>
 <script setup>
-import { uniquePartner } from "~/helpers/array.js";
+import { uniqueArray } from "~/helpers/array.js";
 import { BASE_URL } from "~/constants/urls";
 const { trace } = useTrace();
+const stayPage = ref(true);
+
 if (!trace.value.PartnerId) await navigateTo("/program");
 console.log(trace.value.PartnerId);
 
@@ -377,7 +386,7 @@ const searchPriority = async (e) => {
 const addId = (fieldName, value) => {
   console.log(fieldName, value);
 
-  addProgram.value[fieldName] = uniquePartner([
+  addProgram.value[fieldName] = uniqueArray([
     ...addProgram.value[fieldName],
     value,
   ]);
@@ -393,8 +402,20 @@ const submitProgram = async () => {
         body: addProgram.value,
       }
     );
-    console.log(responseData);
-    await navigateTo(`/program/${trace.value.PartnerId}`);
+    // console.log(responseData);
+    if (!stayPage) {
+      await navigateTo(`/program/${trace.value.PartnerId}`);
+    } else
+      addProgram.value = {
+        program: { PartnerId: trace.value.PartnerId },
+        vision: [],
+        driver: [],
+        indicator: [],
+        phase: [],
+        committee: [],
+        partner: [],
+        priority: [],
+      };
   }
 };
 </script>

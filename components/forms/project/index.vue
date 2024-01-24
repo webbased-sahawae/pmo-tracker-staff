@@ -1,104 +1,146 @@
 <template>
-  <div class="flex flex-col items-center w-[100vw]">
-    <div class="flex gap-2 flex-col md:w-[50vw]">
-      <div class="flex flex-col">
-        <label>Nama Aktifitas</label><input placeholder="edit me" />
-      </div>
-      <div class="flex flex-col">
-        <label>Tempat</label><input placeholder="edit me" />
-      </div>
-      <div class="flex flex-col">
-        <label>Tanggal</label><input type="date" placeholder="edit me" />
-      </div>
-      <!-- <div class="flex flex-col">
-        <div>
-          <label>Program terkait</label>
-        </div>
-        <select name="progra," id="progra,">
-          <option value="programID">Program 1</option>
-          <option value="programID">Program 2</option>
-          <option value="programID">Program 3</option>
-        </select>
-      </div> -->
-      <div class="flex flex-col">
-        <div>
-          <label>Jenis Aktifitas</label>
-        </div>
-        <select name="project" id="project">
-          <option value="seminar">Seminar</option>
-          <option value="training">Training</option>
-          <option value="rapat">Rapat</option>
-          <option value="forum">Forum</option>
-          <option value="expo">Expo</option>
-          <option value="undangan">Undangan</option>
-          <option value="festival">Festival</option>
-          <option value="event">Event</option>
-          <option value="fgd">FGD</option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <label>Kehadiran</label
-        ><input placeholder="Auto complete and will be dynamic" />
-      </div>
-
-      <div class="flex flex-col">
-        <label>Agenda</label><textarea placeholder="edit me" />
-      </div>
-      <div class="flex flex-col">
-        <label>Hasil</label><textarea placeholder="edit me" />
-      </div>
-      <div class="flex flex-col primeBox p-2">
-        <label>Action</label>
-
-        <div class="primeBox p-2">
-          <div class="flex flex-col">
-            <label>Nama Aktifitas</label><input placeholder="edit me" />
-          </div>
-          <div class="flex flex-col">
-            <div>
-              <label>Jenis Aktifitas</label>
+  <div class="px-5">
+    {{ project }}
+    <div class="flex flex-col items-center">
+      <div class="flex flex-col items-center">
+        <label class="text-xl font-bold">
+          {{ PartnerDetail?.name }}
+        </label>
+        <!-- <div class="text-base">
+          {{
+            ProgramDetailError ? "Non-Program Activity" : ProgramDetail?.name
+          }}
+        </div> -->
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            <div class="flex items-center">Project Status:</div>
+            <div :class="`${projectStatus(project.info.status).text}`">
+              {{ projectStatus(project.info.status).title }}
             </div>
-            <select name="project" id="project">
-              <option value="seminar">Seminar</option>
-              <option value="training">Training</option>
-              <option value="rapat">Rapat</option>
-              <option value="forum">Forum</option>
-              <option value="expo">Expo</option>
-              <option value="undangan">Undangan</option>
-              <option value="festival">Festival</option>
-              <option value="event">Event</option>
-              <option value="fgd">FGD</option>
-            </select>
           </div>
-          <div class="flex flex-col">
-            <label>Tempat</label><input placeholder="edit me" />
-          </div>
-          <div class="flex flex-col">
-            <label>Tanggal</label><input type="date" placeholder="edit me" />
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="50"
+            :class="`${projectStatus(project.info.status).BarColor} p-0`"
+            :value="project.info.status ? project.info.status : 0"
+            @change="
+              (e) => {
+                project.info.status = e.target.value;
+              }
+            "
+          />
         </div>
       </div>
-      <!-- <input placeholder="edit me" onchange="(e)=>{testKey()}" /> -->
+      <div class="flex w-[50vw] justify-around gap-2">
+        <div
+          :class="
+            activeTab == 'info'
+              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
+              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
+          "
+          @click="setTab('info')"
+        >
+          Info
+        </div>
+        <div
+          :class="
+            activeTab == 'background'
+              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
+              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
+          "
+          @click="setTab('background')"
+        >
+          Background
+        </div>
+        <div
+          :class="
+            activeTab == 'rundown'
+              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
+              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
+          "
+          @click="setTab('rundown')"
+        >
+          Rundown
+        </div>
 
-      <!-- {{ color.warna }}
-      <button @click="color.warna.value = 'red'">coba</button> -->
+        <div
+          :class="
+            activeTab == 'invitation'
+              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
+              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
+          "
+          @click="setTab('invitation')"
+        >
+          Invitation
+        </div>
+        <div
+          :class="
+            activeTab == 'sinergy'
+              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
+              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
+          "
+          @click="setTab('sinergy')"
+        >
+          Sinergy
+        </div>
+      </div>
+      <div
+        class="flex flex-col p-2 h-[75vh] xl:p-10 py-5 w-[100vw] xl:w-[50vw]"
+      >
+        <!-- {{ activeTab }} -->
+        <FormsProjectInfo v-if="activeTab == 'info'" />
+        <FormsProjectBackground v-if="activeTab == 'background'" />
+        <FormsProjectRundown v-if="activeTab == 'rundown'" />
+        <FormsProjectInvitation v-if="activeTab == 'invitation'" />
+        <FormsProjectSinergy v-if="activeTab == 'sinergy'" />
+      </div>
     </div>
-    <!-- <input
-      type="text"
-      list="languages"
-      placeholder="Pick a programming language.."
-    />
 
-    <datalist id="languages">
-      <option value="PHP" />
-      <option value="C++" />
-      <option value="Java" />
-      <option value="Ruby" />
-      <option value="Python" />
-      <option value="Go" />
-      <option value="Perl" />
-      <option value="Erlang" />
-    </datalist> -->
+    <!-- <FormsProject />
+    test -->
   </div>
 </template>
-<script setup></script>
+<script setup>
+import { BASE_URL } from "~/constants/urls";
+
+const { trace } = useTrace();
+const { project } = useProject();
+
+const {
+  data: ProgramDetail,
+  pending,
+  error: ProgramDetailError,
+} = await useFetch(`${BASE_URL}/program/${trace.value.ProgramId}`);
+// PartnerProgram = ProgramDetail.value;
+
+const { data: PartnerDetail, status } = await useFetch(
+  `${BASE_URL}/partner/${trace.value.PartnerId}`
+);
+
+const projectStatus = (value) => {
+  if (value == 100)
+    return {
+      BarColor: "accent-emerald-500",
+      title: "Complete",
+      text: "text-emerald-500",
+    };
+  else if (value == 50)
+    return {
+      BarColor: "accent-orange-500",
+      text: "text-orange-500",
+      title: "On Going",
+    };
+  else
+    return {
+      BarColor: "accent-red-500",
+      text: "text-red-500",
+      title: "On Hold",
+    };
+};
+const activeTab = useState("tab", () => "info");
+const setTab = (valInput) => {
+  activeTab.value = valInput;
+};
+</script>

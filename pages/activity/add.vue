@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <div class="flex flex-col w-[75vw] gap-2">
+    <div class="flex flex-col w-full xl:w-[75vw] gap-2">
       <!-- Info -->
       <div>
         <div
@@ -14,7 +14,7 @@
             openContainer.info ? 'max-h-[150vh]' : 'max-h-[0vh]'
           }`"
         >
-          <div>
+          <div class="p-2">
             <FormsActivityInfo />
           </div>
         </div>
@@ -38,16 +38,47 @@
                 class="buttonAdd"
                 @click="() => activity.attendance.push('')"
               >
-                + Pengurus Kadin Indonesia
-              </div>
-              <div
-                class="buttonAdd"
-                @click="() => activity.attendance.push('')"
-              >
-                + External
+                + Attendance
               </div>
             </div>
-            <div
+            <div class="grid xl:grid-cols-12 grid-cols-6 gap-2">
+              <div
+                class="flex items-center justify-center md:col-span-6 col-span-6 gap-2"
+              >
+                <label class="flex flex-[1]" for="attendance-name">Name</label>
+                <input
+                  id="attendance-name"
+                  type="text"
+                  class="flex flex-[8] w-full"
+                />
+              </div>
+              <div
+                class="flex items-center justify-center md:col-span-6 col-span-6 gap-2"
+              >
+                <label class="flex flex-[1]" for="attendance-institution"
+                  >Institution</label
+                >
+                <input
+                  id="attendance-institution"
+                  type="text"
+                  class="flex flex-[8] w-full"
+                />
+              </div>
+              <div
+                class="flex items-center justify-center col-span-6 md:col-span-6 gap-2"
+              >
+                <label class="flex flex-[1]" for="attendance-position"
+                  >Position</label
+                >
+                <input
+                  id="attendance-position"
+                  type="text"
+                  class="flex flex-[8] w-full"
+                />
+              </div>
+            </div>
+
+            <!-- <div
               v-for="(item, index) in activity.attendance"
               class="flex w-full gap-2"
             >
@@ -70,7 +101,7 @@
               >
                 X
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

@@ -6,6 +6,11 @@
   </div>
 </template>
 <style>
+input,
+textarea {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 div {
   white-space: pre;
   text-wrap: wrap;

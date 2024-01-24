@@ -2,8 +2,7 @@ export const useProject = () => {
   const project = useState("project", () => {
     return {
       info: {},
-      background: "",
-      agenda: [],
+      rundown: [],
       invitation: [],
       sinergy: [],
       indicator: [],

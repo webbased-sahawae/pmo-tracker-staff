@@ -34,6 +34,15 @@
           />
           <!-- <span> flyer </span> -->
         </div>
+        <div class="flex flex-col items-center">
+          <img
+            src="~/assets/icons/release.png"
+            width="20vw"
+            alt="video"
+            class="src"
+          />
+          <!-- <span> flyer </span> -->
+        </div>
       </div>
       <div class="border-[1px] w-[75%] border-black mt-2" />
     </div>

@@ -1,6 +1,11 @@
 <template>
   <div class="flex flex-col gap-2">
-    <SearchBox :set-value="project.sinergy" :api-route="'/partner/search/'" />
+    <SearchBox
+      :set-value="project.sinergy"
+      :api-route="'/partner/search/'"
+      title-field="name"
+      description-field="chief"
+    />
     <div>
       <div class="flex flex-wrap">
         <text

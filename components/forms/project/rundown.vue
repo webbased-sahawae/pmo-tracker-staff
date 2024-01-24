@@ -8,7 +8,7 @@
           }`"
           @click="openInfo = !openInfo"
         >
-          {{ openInfo ? "New Agenda" : "+ Add Agenda" }}
+          {{ openInfo ? "New Rundown" : "+ Add Rundown" }}
         </div>
         <div
           :class="`flex gap-2 flex-col duration-1000 overflow-hidden ${
@@ -120,7 +120,7 @@
               () => {
                 console.log(projectForm.title);
                 if (projectForm.title) {
-                  project.agenda.push(projectForm);
+                  project.rundown.push(projectForm);
                   projectForm = {};
                 }
               }

@@ -1,7 +1,7 @@
 <template>
-  <div class="p-5">
+  <div class="p-5 w-full">
     <img src="../assets/logo/kadin.png" width="50" />
-    {{ trace }}
+    <!-- {{ trace }} -->
   </div>
 </template>
 <script setup>

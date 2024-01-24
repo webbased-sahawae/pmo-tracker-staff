@@ -15,10 +15,18 @@
             !
           </div>
         </div>
-        <div
-          :class="`flex justify-center items-center border-2 border-black font-black rounded-full w-6 h-6 text-xs hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500`"
-        >
-          ✎
+        <div class="flex gap-2">
+          <div
+            :class="`flex justify-center items-center border-2 border-black font-black rounded-full w-6 h-6 text-xs hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500`"
+          >
+            ✎
+          </div>
+          <div
+            :class="`flex justify-center items-center border-2 border-black font-black rounded-full w-6 h-6 text-xs hover:cursor-pointer hover:border-red-700 hover:text-white hover:bg-red-700 transition ease-in-out duration-500`"
+            @click="deleteProgram(data.id)"
+          >
+            x
+          </div>
         </div>
       </div>
       <!-- Program Info -->
@@ -28,7 +36,7 @@
         }`"
         @click="openInfo = false"
       >
-        <CardsProgramInfo :ProgramDetail="ProgramDetail" />
+        <CardsProgramInfo :ProgramDetail="ProgramDetail ? ProgramDetail : []" />
       </div>
       <!-- End of Program Info -->
       <!-- Project List -->
@@ -50,13 +58,13 @@
             <p class="">+ PROJECT / ACTIVITY</p>
           </div>
           <div class="flex items-center flex-wrap justify-around gap-2">
+            <!-- <CardsProgramProject :ProgramId="data.id" />
             <CardsProgramProject :ProgramId="data.id" />
             <CardsProgramProject :ProgramId="data.id" />
             <CardsProgramProject :ProgramId="data.id" />
             <CardsProgramProject :ProgramId="data.id" />
             <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
+            <CardsProgramProject :ProgramId="data.id" /> -->
           </div>
         </div>
       </div>
@@ -74,4 +82,14 @@ const { data } = defineProps(["data"]);
 const { data: ProgramDetail, status } = await useFetch(
   `${BASE_URL}/program/${data.id}`
 );
+
+const deleteProgram = async (ProgramId) => {
+  try {
+    console.log("clicked");
+    await useFetch(`${BASE_URL}/program/${ProgramId}`, { method: "DELETE" });
+    reloadNuxtApp({ ttl: 0 });
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
