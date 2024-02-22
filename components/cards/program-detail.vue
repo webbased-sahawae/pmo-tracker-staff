@@ -18,6 +18,7 @@
         <div class="flex gap-2">
           <div
             :class="`flex justify-center items-center border-2 border-black font-black rounded-full w-6 h-6 text-xs hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500`"
+            @click="navigateTo(`/program/edit/${data.id}`)"
           >
             ✎
           </div>
@@ -32,7 +33,7 @@
       <!-- Program Info -->
       <div
         :class="`primeBox duration-1000 overflow-hidden ${
-          openInfo ? 'max-h-[150vh]' : 'max-h-[0vh]'
+          openInfo ? 'max-h-[150vh] overflow-y-auto' : 'max-h-[0vh]'
         }`"
         @click="openInfo = false"
       >

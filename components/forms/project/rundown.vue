@@ -112,26 +112,34 @@
               "
             />
           </div>
-          <button
+          <div
             class="buttonAdd"
             style="width: 100%"
-            type="submit"
             @click="
               () => {
-                console.log(projectForm.title);
+                // console.log(projectForm.title);
                 if (projectForm.title) {
                   project.rundown.push(projectForm);
+                  project.rundown = project.rundown.sort((a, b) => {
+                    if (a.start < b.start || !a.start) {
+                      return -1;
+                    } else if (a.start > b.start) {
+                      return 1;
+                    }
+                    // a must be equal to b
+                    return 0;
+                  });
                   projectForm = {};
                 }
               }
             "
           >
             Add
-          </button>
+          </div>
         </div>
       </div>
     </div>
-    {{ projectForm }}
+    {{ project.rundown }}
   </div>
 </template>
 <script setup>

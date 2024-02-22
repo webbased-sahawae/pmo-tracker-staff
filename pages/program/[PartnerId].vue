@@ -16,7 +16,7 @@
         {{ item.name }}
       </option>
     </select>
-    <div class="flex flex-col items-center gap-2">
+    <div class="flex flex-col items-center gap-2 leading-none mb-6">
       <h1 class="line-none">{{ PartnerDetail.name }}</h1>
       <span class="italic line-none">{{ PartnerDetail.chief }}</span>
     </div>
@@ -42,6 +42,7 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls.js";
+import { INSTITUTION_ID } from "~/constants/ids.js";
 const { PartnerId } = useRoute().params;
 const { trace } = useTrace();
 trace.value = { ...trace.value, PartnerId };
@@ -54,6 +55,6 @@ const { data: PartnerDetail } = await useFetch(
 );
 
 const { data: PartnerList } = await useFetch(
-  `${BASE_URL}/partner/institution/14a870b2-6f40-4120-9c3f-2d7c2379442d`
+  `${BASE_URL}/partner/institution/${INSTITUTION_ID}`
 );
 </script>

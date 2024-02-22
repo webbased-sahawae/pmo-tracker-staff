@@ -1,23 +1,15 @@
 <template>
   <div class="">
-    <div>
-      <div>Program Relation</div>
-      <div>
-        <select @change="setProgram">
-          <option>asd</option>
-        </select>
-      </div>
-    </div>
     <div class="flex gap-2 flex-col">
       <div class="flex flex-col">
         <label>Project name</label
         ><input
           class="px-2"
           placeholder="Project name"
-          :value="project.info.title"
+          :value="project.project.title"
           @keyup="
             (e) => {
-              project.info.title = e.target.value;
+              project.project.title = e.target.value;
             }
           "
         />
@@ -27,10 +19,10 @@
         ><input
           class="px-2"
           placeholder="Venue"
-          :value="project.info.location"
+          :value="project.project.location"
           @keyup="
             (e) => {
-              project.info.location = e.target.value;
+              project.project.location = e.target.value;
             }
           "
         />
@@ -42,10 +34,10 @@
         <select
           name="project"
           id="project"
-          :value="project.info.type"
+          :value="project.project.type"
           @change="
             (e) => {
-              project.info.CategoryId = e.target.value;
+              project.project.CategoryId = e.target.value;
             }
           "
         >
@@ -63,10 +55,10 @@
               <input
                 class="px-2"
                 type="datetime-local"
-                :value="project.info.start"
+                :value="project.project.start"
                 @change="
                   (e) => {
-                    project.info.start = e.target.value;
+                    project.project.start = e.target.value;
                   }
                 "
               />
@@ -78,53 +70,15 @@
               <input
                 class="px-2"
                 type="datetime-local"
-                :value="project.info.end"
-                :min="project.info.start"
+                :value="project.project.end"
+                :min="project.project.start"
                 @change="
                   (e) => {
-                    project.info.end = e.target.value;
+                    project.project.end = e.target.value;
                   }
                 "
               />
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col" v-if="trace?.ProgramId">
-        <label>Program KPI</label>
-        <select
-          @change="
-            (e) => {
-              // console.log(JSON.parse(e.target.value));
-              project.indicator = uniqueArray([
-                ...project.indicator,
-                JSON.parse(e.target.value),
-              ]);
-            }
-          "
-          class="text-white"
-        >
-          <option value="default" selected disabled id="defaultSelect">
-            Select KPI to Add
-          </option>
-          <option
-            v-for="item in ProgramIndicator"
-            :value="JSON.stringify(item)"
-          >
-            {{ item.description }}
-          </option>
-        </select>
-        <div>
-          <div
-            v-for="(item, index) in project.indicator"
-            class="hover:text-red-500 hover:cursor-pointer"
-            @click="
-              () => {
-                project.indicator.splice(index, 1);
-              }
-            "
-          >
-            {{ item.description }}
           </div>
         </div>
       </div>
@@ -136,8 +90,8 @@
           <div class="flex gap-2 items-center">
             <input
               type="checkbox"
-              :checked="project.info.flyer"
-              @click="project.info.flyer = !project.info.flyer"
+              :checked="project.project.flyer"
+              @click="project.project.flyer = !project.project.flyer"
             />
             <img
               src="~/assets/icons/flyer.png"
@@ -150,8 +104,8 @@
           <div class="flex gap-2 items-center">
             <input
               type="checkbox"
-              :checked="project.info.photo"
-              @click="project.info.photo = !project.info.photo"
+              :checked="project.project.photo"
+              @click="project.project.photo = !project.project.photo"
             />
             <img
               src="~/assets/icons/photo.png"
@@ -164,8 +118,8 @@
           <div class="flex gap-2 items-center">
             <input
               type="checkbox"
-              :checked="project.info.video"
-              @click="project.info.video = !project.info.video"
+              :checked="project.project.video"
+              @click="project.project.video = !project.project.video"
             />
             <img
               src="~/assets/icons/video.png"
@@ -178,8 +132,8 @@
           <div class="flex gap-2 items-center">
             <input
               type="checkbox"
-              :checked="project.info.release"
-              @click="project.info.release = !project.info.release"
+              :checked="project.project.release"
+              @click="project.project.release = !project.project.release"
             />
             <img
               src="~/assets/icons/release.png"
@@ -192,21 +146,13 @@
         </div>
       </div>
     </div>
-    <!-- {{ project.indicator }} -->
+    <!-- {{ project.project.indicator }} -->
   </div>
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-import { uniqueArray } from "~/helpers/array";
 
 const { project } = useProject();
-const { trace } = useTrace();
-const { data: ProgramIndicator, status } = await useFetch(
-  `${BASE_URL}/indicator/${trace.value.ProgramId}`
-);
-const { data: categories, status: statusCategories } = await useFetch(
-  `${BASE_URL}/category`
-);
 
-const setProgram = () => {};
+const { data: categories } = await useFetch(`${BASE_URL}/category`);
 </script>

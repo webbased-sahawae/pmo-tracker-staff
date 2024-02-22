@@ -1,11 +1,23 @@
 export const useProject = () => {
   const project = useState("project", () => {
     return {
-      info: {},
+      project: {
+        CategoryId: "",
+        title: "",
+        location: "",
+        start: "",
+        end: "",
+        background: "",
+        flyer: false,
+        photo: false,
+        video: false,
+        release: false,
+        status: "",
+      },
       rundown: [],
       invitation: [],
       sinergy: [],
-      indicator: [],
+      ProjectIndicators: [],
     };
   });
 

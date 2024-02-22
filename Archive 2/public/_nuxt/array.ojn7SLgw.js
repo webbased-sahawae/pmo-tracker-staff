@@ -1,1 +1,0 @@
-const s=n=>[...new Set(n.map(t=>JSON.stringify(t)))].map(t=>JSON.parse(t)),e=(n,t)=>{const r=n.map(i=>JSON.stringify(i));console.log(!r.filter(i=>i==JSON.stringify(t)).length==0),r.filter(i=>i==JSON.stringify(t)).length==0&&n.push(t)};export{e as a,s as u};

@@ -4,12 +4,12 @@
       <div class="flex flex-col">
         <div>Background</div>
         <textarea
-          :value="project.info.background"
+          :value="project.background"
           @keyup="
             (e) => {
               console.log(e.target);
 
-              project.info.background = e.target.value;
+              project.project.background = e.target.value;
             }
           "
           rows="15"

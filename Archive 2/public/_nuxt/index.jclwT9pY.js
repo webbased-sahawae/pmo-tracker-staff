@@ -1,1 +1,0 @@
-import{K as t,v as e,x as n,t as o,q as c}from"./entry.uj4Zasle.js";const _={__name:"index",setup(r){t();const a=async()=>await c("/program/8ca69da3-4f05-4768-8748-89a04a536aed");return(s,u)=>(o(),e("div",null,[n("button",{type:"button",onClick:a},"Start")]))}};export{_ as default};

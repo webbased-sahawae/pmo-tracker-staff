@@ -1,28 +1,39 @@
 <template>
   <div class="flex flex-col gap-2">
-    <SearchBox
+    <SearchSinergy
       :set-value="project.sinergy"
       :api-route="'/partner/search/'"
       title-field="name"
       description-field="chief"
     />
     <div>
-      <div class="flex flex-wrap">
-        <text
-          class="cursor-pointer hover:text-red-700"
-          v-for="(item, index) in project.sinergy"
+      <div v-for="institution in institutionList">
+        {{ institution.name }}
+        <div
+          v-for="(partner, index) in project.sinergy.filter(
+            (el) => !el.deletedAt && el.InstitutionId == institution.id
+          )"
           @click="
             () => {
-              project.sinergy.splice(index, 1);
+              partner.deletedAt = new Date();
             }
           "
-          >{{ item }}{{ index < project.sinergy.length - 1 ? " | " : "" }}</text
         >
+          <div class="flex flex-wrap">
+            <CardsPartner :PartnerId="partner.id" />
+          </div>
+        </div>
       </div>
     </div>
+    <!-- {{ institutionList }} -->
   </div>
 </template>
 <script setup>
+import { BASE_URL } from "~/constants/urls";
+
 const { project } = useProject();
-const searchResult = ref([]);
+
+const { data: institutionList, status } = await useFetch(
+  `${BASE_URL}/institution`
+);
 </script>

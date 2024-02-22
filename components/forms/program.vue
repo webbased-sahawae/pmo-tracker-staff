@@ -8,10 +8,10 @@
       <h2>Program</h2>
       <input
         placeholder="Nama Program"
-        :value="addProgram.program.name"
+        :value="dataProgram.program.name"
         @keyup="
           (e) => {
-            addProgram.program.name = e.target.value;
+            dataProgram.program.name = e.target.value;
           }
         "
       />
@@ -23,23 +23,25 @@
       </div>
       <div class="flex flex-col gap-2">
         <div
-          v-for="(vision, index) in addProgram.vision"
+          v-for="(vision, index) in dataProgram.vision.filter(
+            (el) => !el.deletedAt
+          )"
           class="flex flex-row gap-6 items-center"
         >
           <textarea
             rows="2"
             :placeholder="`Visi program ke-${index + 1}`"
             class="w-full"
-            :value="addProgram.vision[index].description"
+            :value="vision.description"
             @keyup="
               (e) => {
-                addProgram.vision[index].description = e.target.value;
+                vision.description = e.target.value;
               }
             "
           />
           <div
             class="buttonDelete"
-            :onclick="() => addProgram.vision.splice(index, 1)"
+            :onclick="() => (vision.deletedAt = new Date())"
           >
             X
           </div>
@@ -48,7 +50,7 @@
           class="buttonAdd"
           @click="
             () => {
-              addProgram.vision.push({});
+              dataProgram.vision.push({});
             }
           "
         >
@@ -61,23 +63,25 @@
       <h2>Pendorong Eksekusi Program</h2>
       <div class="flex flex-col gap-2">
         <div
-          v-for="(driver, index) in addProgram.driver"
+          v-for="(driver, index) in dataProgram.driver.filter(
+            (el) => !el.deletedAt
+          )"
           class="flex flex-row gap-6 items-center"
         >
           <textarea
             rows="2"
             :placeholder="`Pendorong eksekusi program ke-${index + 1}`"
             class="w-full"
-            :value="addProgram.driver[index].description"
+            :value="driver.description"
             @keyup="
               (e) => {
-                addProgram.driver[index].description = e.target.value;
+                driver.description = e.target.value;
               }
             "
           />
           <div
             class="buttonDelete"
-            :onclick="() => addProgram.driver.splice(index, 1)"
+            :onclick="() => (driver.deletedAt = new Date())"
           >
             X
           </div>
@@ -86,7 +90,7 @@
           class="buttonAdd"
           @click="
             () => {
-              addProgram.driver.push({});
+              dataProgram.driver.push({});
             }
           "
         >
@@ -99,23 +103,25 @@
       <h2>KPI yang dipantau</h2>
       <div class="flex flex-col gap-2">
         <div
-          v-for="(indicator, index) in addProgram.indicator"
+          v-for="(indicator, index) in dataProgram.indicator.filter(
+            (el) => !el.deletedAt
+          )"
           class="flex flex-row gap-6 items-center"
         >
           <textarea
             rows="2"
             :placeholder="`KPI yang dipantau ke-${index + 1}`"
             class="w-full"
-            :value="addProgram.indicator[index].description"
+            :value="indicator.description"
             @keyup="
               (e) => {
-                addProgram.indicator[index].description = e.target.value;
+                indicator.description = e.target.value;
               }
             "
           />
           <div
             class="buttonDelete"
-            :onclick="() => addProgram.indicator.splice(index, 1)"
+            :onclick="() => (indicator.deletedAt = new Date())"
           >
             X
           </div>
@@ -124,7 +130,7 @@
           class="buttonAdd"
           @click="
             () => {
-              addProgram.indicator.push({});
+              dataProgram.indicator.push({});
             }
           "
         >
@@ -137,17 +143,19 @@
       <h2>Tahapan Eksekusi</h2>
       <div class="flex flex-col gap-2">
         <div
-          v-for="(phase, index) in addProgram.phase"
+          v-for="(phase, index) in dataProgram.phase.filter(
+            (el) => !el.deletedAt
+          )"
           class="flex flex-row gap-6 items-center"
         >
           <textarea
             rows="2"
             :placeholder="`Tahapan Eksekusi ke-${index + 1}`"
             class="w-full"
-            :value="addProgram.phase[index].description"
+            :value="phase.description"
             @keyup="
               (e) => {
-                addProgram.phase[index].description = e.target.value;
+                phase.description = e.target.value;
               }
             "
           />
@@ -157,7 +165,7 @@
               name="quarter"
               @change="
                 (e) => {
-                  addProgram.phase[index].quarter = e.target.value;
+                  phase.quarter = e.target.value;
                 }
               "
             >
@@ -169,7 +177,7 @@
           </div>
           <div
             class="buttonDelete"
-            :onclick="() => addProgram.phase.splice(index, 1)"
+            :onclick="() => (phase.deletedAt = new Date())"
           >
             X
           </div>
@@ -178,7 +186,7 @@
           class="buttonAdd"
           @click="
             () => {
-              addProgram.phase.push({ quarter: 1 });
+              dataProgram.phase.push({ quarter: 1 });
             }
           "
         >
@@ -189,35 +197,64 @@
     <!-- PIC (Komtap) -->
     <div class="flex flex-col gap-2">
       <h2>PIC (Komtap)</h2>
-      <div class="flex gap-4">
-        <div class="flex gap-2">
-          <input placeholder="Type to search" @keyup="searchCommittees" />
+      <div class="flex flex-col gap-4">
+        <!-- <div class="flex gap-2">
+          <input placeholder="Type to search" @keyup="searchPartnerPositions" />
           <div class="flex gap-2"></div>
-        </div>
+        </div> -->
+
+        <SearchPartnerPosition />
         <div
+          v-for="item in dataProgram.PartnerPosition.filter(
+            (el) => !el.deletedAt
+          )"
+        >
+          <div
+            class="cursor-pointer hover:text-red-500"
+            @click="
+              () => {
+                item.deletedAt = new Date();
+                console.log('click');
+              }
+            "
+          >
+            {{ item.Position.name }}
+          </div>
+          <!-- <CardsPartnerPosition :PartnerPositionId="item.id" /> -->
+        </div>
+        <!-- <div
           class="flex flex-row gap-2 primeBox p-2 w-full overflow-scroll scroll-smooth"
         >
           <CardsButtonToAdd
-            v-for="committee in committees.value"
-            :title="committee.name"
-            :description="committee.chief"
-            :key="committee.id"
-            @click="addId('committee', { CommitteeId: committee.id })"
+            v-for="PartnerPosition in PartnerPositions.value"
+            :title="PartnerPosition.name"
+            :description="PartnerPosition.position"
+            :key="PartnerPosition.id"
+            @click="addId('PartnerPosition', { UserId: PartnerPosition.id })"
           />
-        </div>
+        </div> -->
       </div>
 
       <div
-        class="flex flex-row flex-wrap gap-2 primeBox p-2 w-full"
-        v-if="addProgram.committee.length"
+        class="flex flex-row flex-wrap gap-2 p-2 w-full"
+        v-if="dataProgram.PartnerPosition?.filter((el) => !el.deletedAt).length"
       >
-        <CardsButtonAdded
-          v-for="(item, index) in addProgram.committee"
-          :FieldId="item.CommitteeId"
-          field="committee"
-          :onclick="() => addProgram.committee.splice(index, 1)"
-          :key="item.CommitteeId"
-        />
+        <div
+          v-for="(item, index) in dataProgram.PartnerPosition.filter(
+            (el) => !el.deletedAt
+          )"
+        >
+          {{ item.position }}
+        </div>
+        <!-- <CardsButtonAdded
+          v-for="(item, index) in dataProgram.PartnerPosition.filter(
+            (el) => !el.deletedAt
+          )"
+          :FieldId="item.PartnerPositionId"
+          field="PartnerPosition"
+          :onclick="() => (item.deletedAt = new Date())"
+          :key="item.PartnerPositionId"
+        /> -->
       </div>
       <!-- {{ partners }} -->
     </div>
@@ -235,7 +272,7 @@
           <CardsButtonToAdd
             v-for="partner in partners.value"
             :title="partner.name"
-            :description="partner.chief"
+            :description="partner.Institution.name"
             :key="partner.id"
             @click="addId('partner', { PartnerId: partner.id })"
           />
@@ -243,15 +280,16 @@
       </div>
 
       <div
-        class="flex flex-row flex-wrap gap-2 primeBox p-2 w-full"
-        v-if="addProgram.partner.length"
+        class="flex flex-row flex-wrap gap-2 p-2 w-full"
+        v-if="dataProgram.partner?.filter((el) => !el.deletedAt).length"
       >
         <CardsButtonAdded
-          v-for="(item, index) in addProgram.partner"
+          v-for="(item, index) in dataProgram.partner.filter(
+            (el) => !el.deletedAt
+          )"
           :FieldId="item.PartnerId"
           field="partner"
-          :onclick="() => addProgram.partner.splice(index, 1)"
-          :key="item.PartnerId"
+          :onclick="() => (item.deletedAt = new Date())"
         />
       </div>
       <!-- {{ partners }} -->
@@ -278,13 +316,15 @@
       </div>
 
       <div
-        class="flex flex-row flex-wrap gap-2 primeBox p-2 w-full"
-        v-if="addProgram.priority.length"
+        class="flex flex-row flex-wrap gap-2 p-2 w-full"
+        v-if="dataProgram.priority?.filter((el) => !el.deletedAt).length"
       >
         <CardsButtonAdded
-          v-for="(item, index) in addProgram.priority"
+          v-for="(item, index) in dataProgram.priority.filter(
+            (el) => !el.deletedAt
+          )"
           :FieldId="item.PriorityId"
-          :onclick="() => addProgram.priority.splice(index, 1)"
+          :onclick="() => (item.deletedAt = new Date())"
           field="priority"
           :key="item.PriorityId"
         />
@@ -292,7 +332,11 @@
     </div>
     <div>
       <!-- {{ stayPage }} -->
-      <div @click="stayPage = !stayPage" class="cursor-pointer">
+      <div
+        @click="stayPage = !stayPage"
+        class="cursor-pointer"
+        v-if="dataProgram.program.id"
+      >
         <input type="checkbox" :checked="stayPage" />
         Stay on this page after submit
       </div>
@@ -303,7 +347,7 @@
           type="submit"
           @click="submitProgram"
         >
-          Submit
+          {{ !dataProgram.program.id ? "Submit" : "Update" }}
         </button>
         <button
           class="buttonDelete"
@@ -319,7 +363,7 @@
         </button>
       </div>
     </div>
-    <!-- {{ addProgram }} -->
+    <!-- {{ dataProgram.PartnerPosition }} -->
   </div>
 </template>
 <script setup>
@@ -335,27 +379,22 @@ const { data: PartnerDetail, status } = await useFetch(
   `${BASE_URL}/partner/${trace.value.PartnerId}`
 );
 
-const addProgram = ref({
-  program: { PartnerId: trace.value.PartnerId },
-  vision: [],
-  driver: [],
-  indicator: [],
-  phase: [],
-  committee: [],
-  partner: [],
-  priority: [],
-});
-// Committees module
-const committees = ref([]);
-const searchCommittees = async (e) => {
+const { dataProgram } = useProgram();
+// dataProgram.program.PartnerId = trace.value.PartnerId;
+dataProgram.value.program.PartnerId = trace.value.PartnerId;
+// PartnerPositions module
+const PartnerPositions = ref([]);
+const searchPartnerPositions = async (e) => {
   if (e.target.value.length > 2) {
-    const { data: ProgramCommittees, status } = await useFetch(
-      `${BASE_URL}/committee/search/${e.target.value}`
+    const { data: ProgramPartnerPositions, status } = await useFetch(
+      `${BASE_URL}/PartnerPosition/search/${trace.PartnerId}`,
+      { query: { search: e.target.value } }
     );
-    if (ProgramCommittees) committees.value = ProgramCommittees;
-    else committees.value = [];
+    if (ProgramPartnerPositions)
+      PartnerPositions.value = ProgramPartnerPositions;
+    else PartnerPositions.value = [];
   }
-  if (e.target.value.length < 3) committees.value = [];
+  if (e.target.value.length < 3) PartnerPositions.value = [];
 };
 
 // Partner module
@@ -386,36 +425,48 @@ const searchPriority = async (e) => {
 const addId = (fieldName, value) => {
   console.log(fieldName, value);
 
-  addProgram.value[fieldName] = uniqueArray([
-    ...addProgram.value[fieldName],
+  dataProgram.value[fieldName] = uniqueArray([
+    ...dataProgram.value[fieldName],
     value,
   ]);
 };
 
 const submitProgram = async () => {
-  if (!addProgram.value.program.name) console.log("input program name");
+  if (!dataProgram.value.program.name) console.log("input program name");
   else {
-    const { data: responseData } = await useFetch(
-      `${BASE_URL}/program/create`,
-      {
-        method: "post",
-        body: addProgram.value,
-      }
-    );
-    // console.log(responseData);
-    if (!stayPage) {
+    const { data: responseData } = await useFetch(`${BASE_URL}/program/`, {
+      method: "post",
+      body: dataProgram.value,
+    });
+    console.log(responseData);
+    if (!stayPage.value || dataProgram.value.program.id) {
+      console.log("move!!!");
       await navigateTo(`/program/${trace.value.PartnerId}`);
     } else
-      addProgram.value = {
+      dataProgram.value = {
         program: { PartnerId: trace.value.PartnerId },
         vision: [],
         driver: [],
         indicator: [],
         phase: [],
-        committee: [],
+        PartnerPosition: [],
         partner: [],
         priority: [],
       };
   }
 };
+
+onBeforeUnmount(() => {
+  console.log("about to go");
+  dataProgram.value = {
+    program: { PartnerId: trace.value.PartnerId },
+    vision: [],
+    driver: [],
+    indicator: [],
+    phase: [],
+    PartnerPosition: [],
+    partner: [],
+    priority: [],
+  };
+});
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div class="relative">
-    {{ searchResultOpen }}
-    {{ search }}
     <input
       @focus="searchResultOpen.search = true"
       @blur="searchResultOpen.search = false"
       type="text"
       list="browsers"
-      class="w-full px-2"
+      class="w-full"
       @keyup="
         (e) => {
+          console.log('asadasd');
+
           searchFuntion(e.target.value);
           search = e.target.value;
           ``;
@@ -21,7 +21,7 @@
         !searchResult?.value?.length && 'hidden'
       }  ${
         !searchResultOpen.result && !searchResultOpen.search && 'hidden'
-      } rounded-2xl max-h-[25vh] overflow-y-auto`"
+      } rounded-2xl max-h-[25vw] overflow-scroll`"
     >
       <div
         v-for="item in searchResult.value"
@@ -31,10 +31,9 @@
         @mouseout="searchResultOpen.result = false"
       >
         <span class="font-bold">
-          {{ item.name }}
+          {{ item.Position.name }}
         </span>
-        <div class="">{{ item.Partner.name }}</div>
-        <div class="italic" v-if="item.position">{{ item.position }}</div>
+        <!-- <div class="italic">{{ item[descriptionField] }}</div> -->
       </div>
     </div>
     {{ searchResult?.value?.length }}
@@ -42,24 +41,27 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-import { uniqueArrayWithFilter } from "~/helpers/array.js";
+const { dataProgram } = useProgram();
 
-const { setValue } = defineProps(["setValue"]);
 const search = ref("");
 const searchResult = ref([]);
 const searchFuntion = async (searchValue) => {
-  if (search.value.length > 1) {
-    const { data: users, status } = await useFetch(
-      `${BASE_URL}/user/search/${searchValue}`
+  console.log(useTrace().trace.value.PartnerId);
+  if (search.value.length > 2) {
+    const { data: partners, status } = await useFetch(
+      `${BASE_URL}/PartnerPosition/search/${useTrace().trace.value.PartnerId}`,
+      { query: { search: searchValue } }
     );
-    searchResult.value = users;
+    searchResult.value = partners;
   } else searchResult.value = [];
 };
 const searchResultOpen = ref({ search: false, result: false });
 
 const chooseResult = (item) => {
-  if (!setValue.map((el) => JSON.stringify(el)).includes(JSON.stringify(item)))
-    setValue.push(item);
+  !dataProgram.value.PartnerPosition.map((el) => JSON.stringify(el)).includes(
+    JSON.stringify(item)
+  ) && dataProgram.value.PartnerPosition.push(item);
+  console.log(item);
   searchResultOpen.value.result = false;
 };
 </script>
