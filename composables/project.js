@@ -12,11 +12,11 @@ export const useProject = () => {
         photo: false,
         video: false,
         release: false,
-        status: "",
+        status: 1,
       },
-      rundown: [],
-      invitation: [],
-      sinergy: [],
+      ProjectRundown: [],
+      ProjectInvitation: [],
+      Sinergy: [],
       ProjectIndicators: [],
     };
   });

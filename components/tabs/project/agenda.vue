@@ -14,7 +14,7 @@
           <th>Speaker / Moderator</th>
           <th>Notes</th>
         </tr>
-        <tr v-for="(item, index) in project.rundown" :data="item">
+        <tr v-for="(item, index) in project.ProjectRundown" :data="item">
           <td class="text-center">{{ index + 1 }}</td>
           <td class="text-center">{{ dateConvert(item.start).date }}</td>
           <td class="text-center">
@@ -27,7 +27,7 @@
           <td class="text-center long-cell">{{ item.notes }}</td>
         </tr>
       </table>
-      <CardsRundown v-for="item in project.rundown" :data="item" />
+      <CardsRundown v-for="item in project.ProjectRundown" :data="item" />
     </div>
   </div>
 </template>

@@ -30,10 +30,27 @@
         <CardsProgramDetail v-for="program in ProgramPartner" :data="program" />
       </div>
       <div class="primeBox w-full h-full">
-        Kegiatan Pengurus diluar Program
-        <div class="p-2">
+        Project Pengurus diluar Program
+        <div class="flex flex-col justify-start gap-2 p-2">
           <div class="buttonAdd" @click="() => navigateTo('/project/add/')">
-            <p class="">+ Non-Program Activity</p>
+            + Project
+          </div>
+          <div class="flex gap-2">
+            <div
+              v-for="project in ProjectsNonProgram"
+              class="md:w-[23vw] w-screen"
+            >
+              <CardsMiniProject
+                :ProjectId="project.id"
+                :title="project.title"
+                :projectCategory="project.Category.name"
+                :status="project.status"
+                :startDate="project.start"
+                :endDate="project.end"
+                :sinergy="project.PartnerProjectActivities"
+                :logoId="project.image && project.id"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -49,6 +66,10 @@ trace.value = { ...trace.value, PartnerId };
 trace.value.ProgramId && delete trace.value.ProgramId;
 const { data: ProgramPartner } = await useFetch(
   `${BASE_URL}/program/department/${PartnerId}`
+);
+
+const { data: ProjectsNonProgram } = await useFetch(
+  `${BASE_URL}/project/non/${PartnerId}`
 );
 const { data: PartnerDetail } = await useFetch(
   `${BASE_URL}/partner/${PartnerId}`

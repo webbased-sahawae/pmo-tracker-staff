@@ -8,8 +8,8 @@
         {{ openAddKpi ? "New KPI" : "+ Add KPI" }}
       </div>
       <div
-        :class="` duration-1000 overflow-hidden w-full  ${
-          openAddKpi ? 'max-h-[50vh] p-2 primeBox' : 'max-h-[0vh]'
+        :class="` duration-1000 overflow-hidden overflow-y-scroll w-full  ${
+          openAddKpi ? 'max-h-[50vh] p-4 primeBox' : 'max-h-[0vh]'
         } `"
       >
         <p class="leading-none">
@@ -37,9 +37,7 @@
         <div v-if="listKPI.length">
           Select KPI
 
-          <div
-            class="max-h-[25vw] w-full overflow-y-auto shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] py-2 rounded-2xl"
-          >
+          <div class="rounded-2xl border-4">
             <div
               v-for="item in listKPI"
               class="hover:bg-blue-500 rounded-2xl p-2 cursor-pointer hover:text-white"
@@ -49,13 +47,13 @@
                     JSON.stringify(el)
                   ).includes(
                     JSON.stringify({
-                      ProgramId: item.ProgramId,
                       ProgramIndicatorId: item.id,
+                      ProgramId: item.Program.id,
                     })
                   ) &&
                     project.ProjectIndicators.push({
-                      ProgramId: item.ProgramId,
                       ProgramIndicatorId: item.id,
+                      ProgramId: item.Program.id,
                     });
                 }
               "
@@ -65,6 +63,7 @@
                   {{ item.description }}
                 </b>
                 <i>
+                  <!-- {{ item.Program.name }} -->
                   {{ item.Program.name }}
                 </i>
               </div>

@@ -15,14 +15,15 @@
           <div class="flex gap-2">
             <div class="flex items-center">Project Status:</div>
             <div :class="`${projectStatus(project.project.status).text}`">
+              [{{ project.project.status }}]
               {{ projectStatus(project.project.status).title }}
             </div>
           </div>
           <input
             type="range"
-            min="0"
+            min="1"
             max="100"
-            step="50"
+            class="md:w-[25vw]"
             :class="`${projectStatus(project.project.status).BarColor} p-0`"
             :value="project.project.status ? project.project.status : 0"
             @change="
@@ -66,25 +67,15 @@
         </div>
         <div
           :class="
-            activeTab == 'rundown'
+            activeTab == 'ProjectRundown'
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('rundown')"
+          @click="setTab('ProjectRundown')"
         >
           Rundown
         </div>
 
-        <div
-          :class="
-            activeTab == 'invitation'
-              ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
-              : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
-          "
-          @click="setTab('invitation')"
-        >
-          Invitation
-        </div>
         <div
           :class="
             activeTab == 'sinergy'
@@ -103,8 +94,7 @@
           <!-- {{ activeTab }} -->
           <FormsProjectInfo v-if="activeTab == 'info'" />
           <FormsProjectBackground v-if="activeTab == 'background'" />
-          <FormsProjectRundown v-if="activeTab == 'rundown'" />
-          <FormsProjectInvitation v-if="activeTab == 'invitation'" />
+          <FormsProjectRundown v-if="activeTab == 'ProjectRundown'" />
           <FormsProjectSinergy v-if="activeTab == 'sinergy'" />
           <FormsProjectProgramRelation v-if="activeTab == 'kpi'" />
         </div>
@@ -148,7 +138,6 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-
 const { trace } = useTrace();
 const { project } = useProject();
 project.value.PartnerId = trace.value.PartnerId;
@@ -160,26 +149,6 @@ const { data: PartnerDetail, status } = await useFetch(
   `${BASE_URL}/partner/${trace.value.PartnerId}`
 );
 
-const projectStatus = (value) => {
-  if (value == 100)
-    return {
-      BarColor: "accent-emerald-500",
-      title: "Complete",
-      text: "text-emerald-500",
-    };
-  else if (value == 50)
-    return {
-      BarColor: "accent-orange-500",
-      text: "text-orange-500",
-      title: "On Going",
-    };
-  else
-    return {
-      BarColor: "accent-red-500",
-      text: "text-red-500",
-      title: "On Hold",
-    };
-};
 const activeTab = ref("kpi");
 
 const setTab = (valInput) => {
@@ -191,30 +160,20 @@ const submitProject = async () => {
   if (!project.value.project.title) console.log("input project name");
   else {
     console.log("masuk");
+
     const { data: responseData } = await useFetch(`${BASE_URL}/project`, {
       method: "post",
       body: project.value,
       watch: false,
     });
     console.log(responseData);
-    // if (!stayPage.value || project.value.id) {
-    //   console.log("move!!!");
-    //   await navigateTo(`/program/${trace.value.PartnerId}`);
-    // } else
-    //   project.value = {
-    //     program: { PartnerId: trace.value.PartnerId },
-    //     vision: [],
-    //     driver: [],
-    //     indicator: [],
-    //     phase: [],
-    //     PartnerPosition: [],
-    //     partner: [],
-    //     priority: [],
-    //   };
+    if (!stayPage.value || project.value.id) {
+      console.log("move!!!");
+      await navigateTo(`/program/${trace.value.PartnerId}`);
+    } else resetStateProject();
   }
 };
-
-onBeforeUnmount(() => {
+const resetStateProject = () => {
   project.value = {
     project: {
       ProgramId: null,
@@ -228,12 +187,40 @@ onBeforeUnmount(() => {
       photo: false,
       video: false,
       release: false,
-      status: null,
+      status: 1,
     },
-    rundown: [],
-    invitation: [],
-    sinergy: [],
+    ProjectRundown: [],
+    ProjectInvitation: [],
+    Sinergy: [],
     ProjectIndicators: [],
   };
+};
+
+const projectStatus = (value) => {
+  if (value > 80)
+    return {
+      BarColor: "accent-green-500",
+      title: "Very Impactful",
+      text: "text-green-500",
+      border: "border-green-500",
+    };
+  else if (value > 40)
+    return {
+      BarColor: "accent-orange-500",
+      text: "text-orange-500",
+      title: "Highly Impactful",
+      border: "border-orange-500",
+    };
+  else
+    return {
+      BarColor: "accent-gray-500",
+      text: "text-gray-500",
+      title: "Impactful",
+      border: "border-gray-500",
+    };
+};
+
+onBeforeUnmount(() => {
+  resetStateProject();
 });
 </script>

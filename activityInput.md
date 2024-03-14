@@ -1,7 +1,7 @@
 Nama Aktifitas
 Attandance
 tempat,tanggal
-rundown
+ProjectRundown
 Hasil
 Action => goes to new project creation
 

@@ -14,6 +14,7 @@
           "
         />
       </div>
+
       <div class="flex flex-col">
         <label>Venue</label
         ><input
@@ -34,15 +35,20 @@
         <select
           name="project"
           id="project"
-          :value="project.project.type"
           @change="
             (e) => {
               project.project.CategoryId = e.target.value;
             }
           "
         >
-          <option disabled selected>Please choose the project type</option>
-          <option v-for="item in categories" :value="item.id">
+          <option disabled :selected="!project.project.CategoryId">
+            Please choose the project type
+          </option>
+          <option
+            v-for="item in categories"
+            :selected="item.id == project.project.CategoryId"
+            :value="item.id"
+          >
             {{ item.name }}
           </option>
         </select>

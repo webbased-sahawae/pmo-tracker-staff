@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
     <SearchSinergy
-      :set-value="project.sinergy"
+      :set-value="project.Sinergy"
       :api-route="'/partner/search/'"
       title-field="name"
       description-field="chief"
@@ -10,7 +10,7 @@
       <div v-for="institution in institutionList">
         {{ institution.name }}
         <div
-          v-for="(partner, index) in project.sinergy.filter(
+          v-for="(partner, index) in project.Sinergy.filter(
             (el) => !el.deletedAt && el.InstitutionId == institution.id
           )"
           @click="

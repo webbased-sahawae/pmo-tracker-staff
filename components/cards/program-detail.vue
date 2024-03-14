@@ -43,7 +43,7 @@
       <!-- Project List -->
       <div>
         <div
-          :class="`primeBox duration-1000 overflow-hidden ${
+          :class="`primeBox duration-1000 overflow-hidden flex flex-col gap-2 ${
             openProject ? 'max-h-[150vh] p-2 ' : 'max-h-[0vh]'
           }`"
         >
@@ -58,14 +58,19 @@
           >
             <p class="">+ PROJECT / ACTIVITY</p>
           </div>
-          <div class="flex items-center flex-wrap justify-around gap-2">
-            <!-- <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" />
-            <CardsProgramProject :ProgramId="data.id" /> -->
+          <div class="flex flex-wrap justify-start gap-2">
+            <div v-for="project in Projects" class="md:w-[23vw] w-screen">
+              <CardsMiniProject
+                :ProjectId="project.id"
+                :title="project.title"
+                :projectCategory="project.Category.name"
+                :status="project.status"
+                :startDate="project.start"
+                :endDate="project.end"
+                :sinergy="project.PartnerProjectActivities"
+                :logoId="project.image && project.id"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -80,8 +85,11 @@ const { trace } = useTrace();
 const openInfo = ref(false);
 const openProject = ref(false);
 const { data } = defineProps(["data"]);
-const { data: ProgramDetail, status } = await useFetch(
+const { data: ProgramDetail } = await useFetch(
   `${BASE_URL}/program/${data.id}`
+);
+const { data: Projects } = await useFetch(
+  `${BASE_URL}/project/program/${data.id}`
 );
 
 const deleteProgram = async (ProgramId) => {

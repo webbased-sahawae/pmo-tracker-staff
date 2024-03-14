@@ -119,15 +119,31 @@
               () => {
                 // console.log(projectForm.title);
                 if (projectForm.title) {
-                  project.rundown.push(projectForm);
-                  project.rundown = project.rundown.sort((a, b) => {
-                    if (a.start < b.start || !a.start) {
-                      return -1;
-                    } else if (a.start > b.start) {
-                      return 1;
+                  project.ProjectRundown.push(projectForm);
+                  project.ProjectRundown = project.ProjectRundown.sort(
+                    (a, b) => {
+                      if (!a.start && b.start) {
+                        return -1;
+                      } else if (a.start || !b.start) {
+                        return 1;
+                      }
+                      // a must be equal to b
+                      return 0;
                     }
-                    // a must be equal to b
-                    return 0;
+                  ).sort((a, b) => {
+                    if (!a.start && !b.start) {
+                      if (a.title < b.title) {
+                        return -1;
+                      } else if (a.title > b.title) {
+                        return 1;
+                      }
+                    } else {
+                      if (a.start < b.start) {
+                        return -1;
+                      } else if (a.start > b.start) {
+                        return 1;
+                      }
+                    }
                   });
                   projectForm = {};
                 }
@@ -139,7 +155,64 @@
         </div>
       </div>
     </div>
-    {{ project.rundown }}
+    <table
+      class="border-2"
+      v-if="project.ProjectRundown.filter((el) => !el.deletedAt).length"
+    >
+      <tr class="border-2">
+        <th>Date</th>
+        <th>Time</th>
+        <th>Agenda</th>
+        <th>Location</th>
+        <th>Speaker</th>
+        <th>Notes</th>
+        <th>Action</th>
+      </tr>
+      <tr
+        v-for="rundown in project.ProjectRundown.filter((el) => !el.deletedAt)"
+      >
+        <td class="border-2">
+          {{
+            new Date(rundown.start).toLocaleString("default", {
+              month: "long",
+              day: "2-digit",
+              year: "numeric",
+            })
+          }}
+        </td>
+        <td class="border-2">
+          {{
+            new Date(rundown.start).toLocaleString("default", {
+              timeStyle: "short",
+              hour12: false,
+            })
+          }}
+          -
+          {{
+            new Date(rundown.end).toLocaleString("default", {
+              timeStyle: "short",
+              hour12: false,
+            })
+          }}
+        </td>
+        <td class="border-2 text-center">{{ rundown.title }}</td>
+        <td class="border-2 text-center">{{ rundown.location }}</td>
+        <td class="border-2 text-center">{{ rundown.speaker }}</td>
+        <td class="border-2 text-center">{{ rundown.notes }}</td>
+        <td class="border-2 text-center">
+          <span
+            class="hover:text-red-500 cursor-pointer font-bold"
+            @click="
+              () => {
+                rundown.deletedAt = new Date();
+              }
+            "
+            >X</span
+          >
+        </td>
+      </tr>
+    </table>
+    {{ project.ProjectRundown }}
   </div>
 </template>
 <script setup>
