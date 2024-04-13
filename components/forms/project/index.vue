@@ -1,16 +1,11 @@
 <template>
   <div class="px-5 py-4">
-    <!-- {{ project }} -->
     <div class="flex flex-col items-center">
       <div class="flex flex-col items-center">
         <label class="text-xl font-bold">
           {{ PartnerDetail?.name }}
         </label>
-        <!-- <div class="text-base">
-          {{
-            ProgramDetailError ? "Non-Program Activity" : ProgramDetail?.name
-          }}
-        </div> -->
+
         <div class="flex flex-col">
           <div class="flex gap-2">
             <div class="flex items-center">Project Status:</div>
@@ -41,7 +36,7 @@
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('kpi')"
+          @click.prevent="setTab('kpi')"
         >
           KPI
         </div>
@@ -51,7 +46,7 @@
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('info')"
+          @click.prevent="setTab('info')"
         >
           Info
         </div>
@@ -61,7 +56,7 @@
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('background')"
+          @click.prevent="setTab('background')"
         >
           Background
         </div>
@@ -71,7 +66,7 @@
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('ProjectRundown')"
+          @click.prevent="setTab('ProjectRundown')"
         >
           Rundown
         </div>
@@ -82,7 +77,7 @@
               ? 'flex justify-center border-b-8 w-full font-bold cursor-pointer	items-center text-center'
               : 'flex justify-center border-b-4 w-full cursor-pointer	items-center text-center'
           "
-          @click="setTab('sinergy')"
+          @click.prevent="setTab('sinergy')"
         >
           Sinergy
         </div>
@@ -101,7 +96,7 @@
         <div>
           <!-- {{ stayPage }} -->
           <div
-            @click="stayPage = !stayPage"
+            @click.prevent="stayPage = !stayPage"
             class="cursor-pointer"
             v-if="project?.project?.id"
           >
@@ -113,7 +108,7 @@
               class="buttonAdd"
               style="width: 100%"
               type="button"
-              @click="submitProject"
+              @click.prevent="submitProject"
             >
               {{ !project?.project?.id ? "Submit" : "Update" }}
             </div>
@@ -123,7 +118,7 @@
               type="button"
               :onclick="
                 () => {
-                  navigateTo(`/program/${trace.PartnerId}`);
+                  navigateTo({ path: `/program`, query: trace.PartnerId });
                 }
               "
             >
@@ -167,9 +162,16 @@ const submitProject = async () => {
       watch: false,
     });
     console.log(responseData);
+    await navigateTo({
+      path: "/program",
+      query: { PartnerId: trace.value.PartnerId },
+    });
     if (!stayPage.value || project.value.id) {
       console.log("move!!!");
-      await navigateTo(`/program/${trace.value.PartnerId}`);
+      await navigateTo({
+        path: "/program",
+        query: { PartnerId: trace.value.PartnerId },
+      });
     } else resetStateProject();
   }
 };
@@ -183,10 +185,7 @@ const resetStateProject = () => {
       start: null,
       end: null,
       background: null,
-      flyer: false,
-      photo: false,
-      video: false,
-      release: false,
+
       status: 1,
     },
     ProjectRundown: [],

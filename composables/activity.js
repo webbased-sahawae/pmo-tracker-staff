@@ -1,11 +1,16 @@
 export const useActivity = () => {
   const activity = useState("activity", () => {
     return {
-      info: {},
-      outcome: [],
-      attendance: [],
+      info: {
+        flyer: false,
+        photo: false,
+        video: false,
+        release: false,
+      },
+      // outcome: [],
+      // attendance: [],
       discussion: [],
-      todo: [],
+      // todo: [],
       summary: "",
     };
   });

@@ -98,5 +98,6 @@ select,
 }
 </style>
 <script setup>
+console.log(useRouter());
 // const { dataProgram } = useProgram();
 </script>

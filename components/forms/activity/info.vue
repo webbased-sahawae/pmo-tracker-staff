@@ -1,8 +1,28 @@
 <template>
   <div class="">
-    <div class="flex gap-2 flex-col">
+    <div class="flex gap-2 flex-col cursor-pointer">
+      <div
+        @click.prevent="
+          () => {
+            activity.info.isMain = !activity.info.isMain ? 1 : 0;
+          }
+        "
+        class="flex items-center gap-2 font-bold"
+      >
+        <input
+          type="range"
+          max="1"
+          min="0"
+          :value="!activity.info.isMain ? 0 : 1"
+          class="w-10 p-0 h-5 accent-green-500"
+        />
+        <div>
+          {{ activity.info.isMain ? "Main Activity" : "Side Activity" }}
+        </div>
+      </div>
+
       <div class="flex flex-col">
-        <label>Project name</label
+        <label>Activity name</label
         ><input
           class="px-2"
           placeholder="Project name"
@@ -32,25 +52,24 @@
           <label>Jenis Aktifitas</label>
         </div>
         <select
-          name="activity"
-          id="activity"
-          :value="activity.info.type"
+          name="project"
+          id="project"
           @change="
             (e) => {
-              activity.info.type = e.target.value;
+              activity.info.CategoryId = e.target.value;
             }
           "
         >
-          <option disabled selected>Please choose the activity type</option>
-          <option value="seminar">Seminar</option>
-          <option value="training">Training</option>
-          <option value="rapat">Rapat</option>
-          <option value="forum">Forum</option>
-          <option value="expo">Expo</option>
-          <option value="undangan">Undangan</option>
-          <option value="festival">Festival</option>
-          <option value="event">Event</option>
-          <option value="fgd">FGD</option>
+          <option disabled :selected="!activity.info.CategoryId">
+            Please choose the project type
+          </option>
+          <option
+            v-for="item in categories"
+            :selected="item.id == activity.info.CategoryId"
+            :value="item.id"
+          >
+            {{ item.name }}
+          </option>
         </select>
       </div>
       <div class="flex flex-col">
@@ -89,11 +108,89 @@
         </div>
       </div>
     </div>
+    <div class="flex flex-col hidden">
+      <div>
+        <label>Public Relation Request</label>
+      </div>
+      <div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            :checked="activity.info.flyer"
+            @click.prevent="activity.info.flyer = !activity.info.flyer"
+          />
+          <img
+            src="~/assets/icons/flyer.png"
+            alt="flyer"
+            class="src"
+            width="20vw"
+          />
+          <label>Flyer</label>
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            :checked="activity.info.photo"
+            @click.prevent="activity.info.photo = !activity.info.photo"
+          />
+          <img
+            src="~/assets/icons/photo.png"
+            alt="photo"
+            class="src"
+            width="20vw"
+          />
+          <label>Photo</label>
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            :checked="activity.info.video"
+            @click.prevent="activity.info.video = !activity.info.video"
+          />
+          <img
+            src="~/assets/icons/video.png"
+            alt="video"
+            class="src"
+            width="20vw"
+          />
+          <label>Video</label>
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            :checked="activity.info.release"
+            @click.prevent="activity.info.release = !activity.info.release"
+          />
+          <img
+            src="~/assets/icons/release.png"
+            alt="release"
+            class="src"
+            width="20vw"
+          />
+          <label>Release</label>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
-import { uniqueArray } from "~/helpers/array";
 
 const { activity } = useActivity();
+const { data: categories } = await useFetch(`${BASE_URL}/category`);
+
+onUnmounted(() => {
+  activity.value = {
+    info: {
+      flyer: false,
+      photo: false,
+      video: false,
+      release: false,
+    },
+
+    discussion: [],
+
+    summary: "",
+  };
+});
 </script>

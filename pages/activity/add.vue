@@ -2,10 +2,24 @@
   <div class="flex flex-col items-center">
     <div class="flex flex-col w-full xl:w-[75vw] gap-2">
       <!-- Info -->
+      <div class="leading-none">
+        <h1 class="text-xl font-bold text-center" v-if="trace.ProjectId">
+          {{ ProjectDetail.title }}
+        </h1>
+        <h2
+          :class="
+            trace.ProjectId
+              ? 'text-center font-normal'
+              : 'text-xl font-bold text-center'
+          "
+        >
+          {{ PartnerDetail?.name }}
+        </h2>
+      </div>
       <div>
         <div
-          @click="openContainer.info = !openContainer.info"
-          class="hover:cursor-pointer"
+          @click.prevent="openContainer.info = !openContainer.info"
+          :class="`cursor-pointer ${openContainer.info && 'font-bold'}`"
         >
           Activity Info
         </div>
@@ -20,9 +34,9 @@
         </div>
       </div>
       <!-- Attendance -->
-      <div>
+      <div v-if="false">
         <div
-          @click="openContainer.attendance = !openContainer.attendance"
+          @click.prevent="openContainer.attendance = !openContainer.attendance"
           class="hover:cursor-pointer"
         >
           Attendance
@@ -36,7 +50,7 @@
             <div class="flex gap-2 flex-wrap">
               <div
                 class="buttonAdd"
-                @click="() => activity.attendance.push('')"
+                @click.prevent="() => activity.attendance.push('')"
               >
                 + Attendance
               </div>
@@ -93,7 +107,7 @@
               />
               <div
                 class="buttonDelete p-2"
-                @click="
+                @click.prevent="
                   () => {
                     activity.attendance.splice(index, 1);
                   }
@@ -108,10 +122,10 @@
       <!-- Discussion -->
       <div>
         <div
-          @click="openContainer.discussion = !openContainer.discussion"
-          class="hover:cursor-pointer"
+          @click.prevent="openContainer.discussion = !openContainer.discussion"
+          :class="`cursor-pointer ${openContainer.discussion && 'font-bold'}`"
         >
-          Discussion
+          Discussion Points
         </div>
         <div
           :class="`primeBox duration-1000 overflow-hidden ${
@@ -119,129 +133,35 @@
           }`"
         >
           <div class="flex flex-col gap-2 p-2">
-            <div class="buttonAdd" @click="() => activity.discussion.push('')">
+            <div
+              class="buttonAdd"
+              @click.prevent="
+                () =>
+                  activity.discussion.push({
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  })
+              "
+            >
               + Discussion
             </div>
             <div
-              v-for="(item, index) in activity.discussion"
+              v-for="(item, index) in activity.discussion.filter(
+                (el) => !el.deletedAt
+              )"
               class="flex w-full gap-2"
             >
-              <textarea
-                class="px-2 w-full"
-                :value="activity.discussion[index]"
-                @change="
-                  (e) => {
-                    activity.discussion[index] = e.target.value;
-                  }
-                "
-              />
-              <div
-                class="buttonDelete p-2"
-                @click="
-                  () => {
-                    activity.discussion.splice(index, 1);
-                  }
-                "
-              >
-                X
-              </div>
+              <FormsActivityDiscussion :data="item" :index="index + 1" />
             </div>
           </div>
         </div>
       </div>
-      <!-- Outcome -->
-      <div>
-        <div
-          @click="openContainer.outcome = !openContainer.outcome"
-          class="hover:cursor-pointer"
-        >
-          Outcome
-        </div>
-        <div
-          :class="`primeBox duration-1000 overflow-hidden ${
-            openContainer.outcome ? 'max-h-[150vh]' : 'max-h-[0vh]'
-          }`"
-        >
-          <div class="flex flex-col gap-2 p-2">
-            <div class="buttonAdd" @click="() => activity.outcome.push('')">
-              + Outcome
-            </div>
-            <div
-              v-for="(item, index) in activity.outcome"
-              class="flex w-full gap-2"
-            >
-              <textarea
-                class="px-2 w-full"
-                :value="activity.outcome[index]"
-                @change="
-                  (e) => {
-                    activity.outcome[index] = e.target.value;
-                  }
-                "
-              />
-              <div
-                class="buttonDelete p-2"
-                @click="
-                  () => {
-                    activity.outcome.splice(index, 1);
-                  }
-                "
-              >
-                X
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Todo -->
-      <div>
-        <div
-          @click="openContainer.todo = !openContainer.todo"
-          class="hover:cursor-pointer"
-        >
-          Todo
-        </div>
-        <div
-          :class="`primeBox duration-1000 overflow-hidden ${
-            openContainer.todo ? 'max-h-[150vh]' : 'max-h-[0vh]'
-          }`"
-        >
-          <div class="flex flex-col gap-2 p-2">
-            <div class="buttonAdd" @click="() => activity.todo.push('')">
-              + Todo
-            </div>
-            <div
-              v-for="(item, index) in activity.todo"
-              class="flex w-full gap-2"
-            >
-              <textarea
-                class="px-2 w-full"
-                :value="activity.todo[index]"
-                @change="
-                  (e) => {
-                    activity.todo[index] = e.target.value;
-                  }
-                "
-              />
-              <div
-                class="buttonDelete p-2"
-                @click="
-                  () => {
-                    activity.todo.splice(index, 1);
-                  }
-                "
-              >
-                X
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
       <!-- Summary -->
       <div>
         <div
-          @click="openContainer.summary = !openContainer.summary"
-          class="hover:cursor-pointer"
+          @click.prevent="openContainer.summary = !openContainer.summary"
+          :class="`cursor-pointer ${openContainer.summary && 'font-bold'}`"
         >
           Summary
         </div>
@@ -254,24 +174,80 @@
             <div class="flex w-full gap-2">
               <textarea
                 class="px-2 w-full"
-                :value="activity.summary"
+                :value="activity.info.summary"
                 @keyup="
                   (e) => {
-                    activity.summary = e.target.value;
+                    activity.info.summary = e.target.value;
                   }
                 "
+                rows="5"
               />
             </div>
           </div>
         </div>
       </div>
+      <div class="flex w-full gap-4">
+        <div
+          class="buttonAdd"
+          style="width: 100%"
+          @click.prevent="
+            () => {
+              createActivity();
+            }
+          "
+        >
+          Submit
+        </div>
+        <div
+          class="buttonDelete"
+          style="width: 100%"
+          @click.prevent="
+            () => {
+              $router.back();
+            }
+          "
+        >
+          Cancel
+        </div>
+      </div>
     </div>
-
-    {{ activity }}
   </div>
 </template>
 
 <script setup>
+import { BASE_URL } from "~/constants/urls";
+
+const { trace } = useTrace();
+const { activity } = useActivity();
+
+const createActivity = async () => {
+  try {
+    const data = { ...trace.value, ...activity.value };
+    console.log(data);
+    const {
+      data: responseData,
+      status,
+      error,
+    } = await useFetch(`${BASE_URL}/activity`, {
+      method: "post",
+      body: data,
+      watch: false,
+    });
+
+    if (!error.value) useRouter().back();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const { data: PartnerDetail } = await useFetch(
+  `${BASE_URL}/partner/${trace.value.PartnerId}`
+);
+
+const { data: ProjectDetail } = await useFetch(
+  `${BASE_URL}/project/${trace.value.ProjectId}`
+);
+
 const openContainer = ref({
   info: false,
   discussion: false,
@@ -280,5 +256,8 @@ const openContainer = ref({
   attendance: false,
   summary: false,
 });
-const { activity } = useActivity();
+
+onMounted(async () => {
+  if (!trace?.value?.PartnerId) await navigateTo("/");
+});
 </script>

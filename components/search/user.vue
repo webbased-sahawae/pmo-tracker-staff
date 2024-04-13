@@ -26,7 +26,7 @@
       <div
         v-for="item in searchResult.value"
         class="whitespace-normal hover:bg-blue-700 hover:text-white hover:cursor-pointer px-4 rounded-full duration-500"
-        @click="chooseResult(item)"
+        @click.prevent="chooseResult(item)"
         @mouseover="searchResultOpen.result = true"
         @mouseout="searchResultOpen.result = false"
       >

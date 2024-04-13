@@ -3,9 +3,14 @@
     :class="`w-full border-4 pb-2 px-2 rounded-2xl flex flex-col h-full cursor-pointer ${
       projectStatus(status).hoverborder
     } transition ease-in-out duration-500`"
-    @click="
-      () => {
-        navigateTo(`/project/${ProjectId}`);
+    @click.prevent="
+      async () => {
+        try {
+          await navigateTo(`/project/${ProjectId}`);
+          console.log('move');
+        } catch (error) {
+          console.log(error);
+        }
       }
     "
   >
@@ -15,7 +20,7 @@
           :src="`${
             logoId ? `${BASE_URL}/project/image/${logoId}` : KADIN_LOGO
           }`"
-          class="h-[10vh] w-[20vw] object-contain rounded-2xl"
+          class="h-[10vh] w-full object-contain rounded-2xl"
         />
       </div>
       <div

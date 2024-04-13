@@ -13,7 +13,7 @@
           v-for="(partner, index) in project.Sinergy.filter(
             (el) => !el.deletedAt && el.InstitutionId == institution.id
           )"
-          @click="
+          @click.prevent="
             () => {
               partner.deletedAt = new Date();
             }

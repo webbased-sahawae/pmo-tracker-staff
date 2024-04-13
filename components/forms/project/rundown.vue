@@ -6,7 +6,7 @@
           :class="`flex px-4 items-center border-2 rounded-full hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500 ${
             openInfo ? '' : ''
           }`"
-          @click="openInfo = !openInfo"
+          @click.prevent="openInfo = !openInfo"
         >
           {{ openInfo ? "New Rundown" : "+ Add Rundown" }}
         </div>
@@ -115,7 +115,7 @@
           <div
             class="buttonAdd"
             style="width: 100%"
-            @click="
+            @click.prevent="
               () => {
                 // console.log(projectForm.title);
                 if (projectForm.title) {
@@ -202,7 +202,7 @@
         <td class="border-2 text-center">
           <span
             class="hover:text-red-500 cursor-pointer font-bold"
-            @click="
+            @click.prevent="
               () => {
                 rundown.deletedAt = new Date();
               }

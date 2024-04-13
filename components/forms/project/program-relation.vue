@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-2">
       <div
         :class="`cursor-pointer ${!openAddKpi && 'buttonAdd'}`"
-        @click="openAddKpi = !openAddKpi"
+        @click.prevent="openAddKpi = !openAddKpi"
       >
         {{ openAddKpi ? "New KPI" : "+ Add KPI" }}
       </div>
@@ -41,7 +41,7 @@
             <div
               v-for="item in listKPI"
               class="hover:bg-blue-500 rounded-2xl p-2 cursor-pointer hover:text-white"
-              @click="
+              @click.prevent="
                 {
                   !project.ProjectIndicators.map((el) =>
                     JSON.stringify(el)
@@ -79,7 +79,7 @@
         >
           <div
             class="hover:text-red-500 cursor-pointer"
-            @click="() => (item.deletedAt = new Date())"
+            @click.prevent="() => (item.deletedAt = new Date())"
           >
             <CardsProjectIndicator :data="item" />
             <!-- {{ item }} -->

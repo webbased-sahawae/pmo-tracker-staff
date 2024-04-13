@@ -5,7 +5,7 @@
         :class="`flex px-4 items-center border-2 rounded-full hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500 ${
           openInfo ? '' : ''
         }`"
-        @click="openInfo = !openInfo"
+        @click.prevent="openInfo = !openInfo"
       >
         {{ openInfo ? "New Invitation" : "+ Add Invitation" }}
       </div>
@@ -77,7 +77,7 @@
           <div
             class="buttonAdd"
             style="width: 100%"
-            @click="
+            @click.prevent="
               () => {
                 project.ProjectInvitation.push(invitation);
                 invitation = {};

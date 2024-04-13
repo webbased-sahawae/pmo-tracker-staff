@@ -88,69 +88,6 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col">
-        <div>
-          <label>Public Relation Request</label>
-        </div>
-        <div>
-          <div class="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              :checked="project.project.flyer"
-              @click="project.project.flyer = !project.project.flyer"
-            />
-            <img
-              src="~/assets/icons/flyer.png"
-              alt="flyer"
-              class="src"
-              width="20vw"
-            />
-            <label>Flyer</label>
-          </div>
-          <div class="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              :checked="project.project.photo"
-              @click="project.project.photo = !project.project.photo"
-            />
-            <img
-              src="~/assets/icons/photo.png"
-              alt="photo"
-              class="src"
-              width="20vw"
-            />
-            <label>Photo</label>
-          </div>
-          <div class="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              :checked="project.project.video"
-              @click="project.project.video = !project.project.video"
-            />
-            <img
-              src="~/assets/icons/video.png"
-              alt="video"
-              class="src"
-              width="20vw"
-            />
-            <label>Video</label>
-          </div>
-          <div class="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              :checked="project.project.release"
-              @click="project.project.release = !project.project.release"
-            />
-            <img
-              src="~/assets/icons/release.png"
-              alt="release"
-              class="src"
-              width="20vw"
-            />
-            <label>Release</label>
-          </div>
-        </div>
-      </div>
     </div>
     <!-- {{ project.project.indicator }} -->
   </div>

@@ -48,7 +48,7 @@
         </div>
         <div
           class="buttonAdd"
-          @click="
+          @click.prevent="
             () => {
               dataProgram.vision.push({});
             }
@@ -88,7 +88,7 @@
         </div>
         <div
           class="buttonAdd"
-          @click="
+          @click.prevent="
             () => {
               dataProgram.driver.push({});
             }
@@ -128,7 +128,7 @@
         </div>
         <div
           class="buttonAdd"
-          @click="
+          @click.prevent="
             () => {
               dataProgram.indicator.push({});
             }
@@ -184,7 +184,7 @@
         </div>
         <div
           class="buttonAdd"
-          @click="
+          @click.prevent="
             () => {
               dataProgram.phase.push({ quarter: 1 });
             }
@@ -211,7 +211,7 @@
         >
           <div
             class="cursor-pointer hover:text-red-500"
-            @click="
+            @click.prevent="
               () => {
                 item.deletedAt = new Date();
                 console.log('click');
@@ -230,7 +230,7 @@
             :title="PartnerPosition.name"
             :description="PartnerPosition.position"
             :key="PartnerPosition.id"
-            @click="addId('PartnerPosition', { UserId: PartnerPosition.id })"
+            @click.prevent="addId('PartnerPosition', { UserId: PartnerPosition.id })"
           />
         </div> -->
       </div>
@@ -274,7 +274,7 @@
             :title="partner.name"
             :description="partner.Institution.name"
             :key="partner.id"
-            @click="addId('partner', { PartnerId: partner.id })"
+            @click.prevent="addId('partner', { PartnerId: partner.id })"
           />
         </div>
       </div>
@@ -310,7 +310,7 @@
             :title="priority.name"
             :description="priority.chief"
             :key="priority.id"
-            @click="addId('priority', { PriorityId: priority.id })"
+            @click.prevent="addId('priority', { PriorityId: priority.id })"
           />
         </div>
       </div>
@@ -333,7 +333,7 @@
     <div>
       <!-- {{ stayPage }} -->
       <div
-        @click="stayPage = !stayPage"
+        @click.prevent="stayPage = !stayPage"
         class="cursor-pointer"
         v-if="dataProgram.program.id"
       >
@@ -345,7 +345,7 @@
           class="buttonAdd"
           style="width: 100%"
           type="submit"
-          @click="submitProgram"
+          @click.prevent="submitProgram"
         >
           {{ !dataProgram.program.id ? "Submit" : "Update" }}
         </button>
@@ -355,7 +355,7 @@
           type="button"
           :onclick="
             () => {
-              navigateTo(`/program/${trace.PartnerId}`);
+              navigateTo({ path: `/program`, query: trace.PartnerId });
             }
           "
         >
@@ -371,9 +371,6 @@ import { uniqueArray } from "~/helpers/array.js";
 import { BASE_URL } from "~/constants/urls";
 const { trace } = useTrace();
 const stayPage = ref(true);
-
-if (!trace.value.PartnerId) await navigateTo("/program");
-console.log(trace.value.PartnerId);
 
 const { data: PartnerDetail, status } = await useFetch(
   `${BASE_URL}/partner/${trace.value.PartnerId}`
