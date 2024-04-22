@@ -5,8 +5,8 @@
       :class="`duration-1000 flex gap-2 w-full items-between justify-between`"
     >
       <div
-        :class="`duration-500 border-grey-200 hover:border-orange-500 hover:bg-orange-500 hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'all' && 'border-orange-500'
+        :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
+          showActivity == 'all' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
@@ -17,8 +17,8 @@
         All
       </div>
       <div
-        :class="`duration-500 border-grey-200 hover:border-orange-500 hover:bg-orange-500 hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'past' && 'border-orange-500'
+        :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
+          showActivity == 'past' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
@@ -29,8 +29,8 @@
         Past
       </div>
       <div
-        :class="`duration-500 border-grey-200 hover:border-orange-500 hover:bg-orange-500 hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'future' && 'border-orange-500'
+        :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
+          showActivity == 'future' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
@@ -70,8 +70,8 @@ const borderStatus = (startDate, summary) => {
         break;
       default:
         return {
-          border: "border-green-500",
-          text: " hover:bg-green-500 hover:text-white",
+          border: "border-complete",
+          text: " hover:bg-complete hover:text-white",
         };
         break;
     }

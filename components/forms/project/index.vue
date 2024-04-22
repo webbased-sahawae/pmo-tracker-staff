@@ -163,13 +163,13 @@ const submitProject = async () => {
     });
     console.log(responseData);
     await navigateTo({
-      path: "/program",
+      path: "/tracker/assignment",
       query: { PartnerId: trace.value.PartnerId },
     });
     if (!stayPage.value || project.value.id) {
       console.log("move!!!");
       await navigateTo({
-        path: "/program",
+        path: "/tracker/assignment",
         query: { PartnerId: trace.value.PartnerId },
       });
     } else resetStateProject();
@@ -198,24 +198,24 @@ const resetStateProject = () => {
 const projectStatus = (value) => {
   if (value > 80)
     return {
-      BarColor: "accent-green-500",
+      BarColor: "accent-complete",
       title: "Very Impactful",
-      text: "text-green-500",
-      border: "border-green-500",
+      text: "text-complete",
+      border: "border-complete",
     };
   else if (value > 40)
     return {
-      BarColor: "accent-orange-500",
-      text: "text-orange-500",
+      BarColor: "accent-ongoing",
+      text: "text-ongoing",
       title: "Highly Impactful",
-      border: "border-orange-500",
+      border: "border-ongoing",
     };
   else
     return {
-      BarColor: "accent-gray-500",
-      text: "text-gray-500",
+      BarColor: "accent-stop",
+      text: "text-stop",
       title: "Impactful",
-      border: "border-gray-500",
+      border: "border-stop",
     };
 };
 

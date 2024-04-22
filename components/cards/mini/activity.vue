@@ -117,8 +117,8 @@ const borderStatus = (startDate, summary) => {
         break;
       default:
         return {
-          border: "border-green-500",
-          text: " hover:bg-green-500 hover:text-white",
+          border: "border-complete",
+          text: " hover:bg-complete hover:text-white",
         };
         break;
     }

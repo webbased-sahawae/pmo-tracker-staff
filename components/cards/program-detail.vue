@@ -21,7 +21,7 @@
         <div class="flex gap-2">
           <div
             :class="`flex justify-center items-center border-2 border-black font-black rounded-full w-6 h-6 text-xs hover:cursor-pointer hover:border-indigo-700 hover:text-indigo-700 transition ease-in-out duration-500`"
-            @click.prevent="navigateTo(`/program/edit/${data.id}`)"
+            @click.prevent="navigateTo(`/tracker/assignment/edit/${data.id}`)"
           >
             ✎
           </div>
@@ -55,7 +55,7 @@
             @click.prevent="
               () => {
                 trace.ProgramId = data.id;
-                navigateTo('/project/add/');
+                navigateTo('/tracker/project/add/');
               }
             "
           >

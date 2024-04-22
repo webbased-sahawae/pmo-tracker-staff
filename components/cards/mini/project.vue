@@ -6,7 +6,7 @@
     @click.prevent="
       async () => {
         try {
-          await navigateTo(`/project/${ProjectId}`);
+          await navigateTo(`/tracker/project/${ProjectId}`);
           console.log('move');
         } catch (error) {
           console.log(error);
@@ -81,27 +81,27 @@ import { BASE_URL, KADIN_LOGO } from "~/constants/urls";
 const projectStatus = (value) => {
   if (value > 80)
     return {
-      BarColor: "accent-green-500",
+      BarColor: "accent-complete",
       title: "Very Impactful",
-      text: "text-green-500",
-      border: "border-green-500",
-      hoverborder: "hover:border-green-500",
+      text: "text-complete",
+      border: "border-complete",
+      hoverborder: "hover:border-complete",
     };
   else if (value > 40)
     return {
-      BarColor: "accent-orange-500",
-      text: "text-orange-500",
+      BarColor: "accent-ongoing",
+      text: "text-ongoing",
       title: "Highly Impactful",
-      border: "border-orange-500",
-      hoverborder: "hover:border-orange-500",
+      border: "border-ongoing",
+      hoverborder: "hover:border-ongoing",
     };
   else
     return {
-      BarColor: "accent-gray-500",
-      text: "text-gray-500",
+      BarColor: "accent-stop",
+      text: "text-stop",
       title: "Impactful",
-      border: "border-gray-500",
-      hoverborder: "hover:border-gray-500",
+      border: "border-stop",
+      hoverborder: "hover:border-stop",
     };
 };
 

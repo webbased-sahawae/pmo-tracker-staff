@@ -9,10 +9,11 @@ export default class useICookie {
   }
 
   static get(name) {
-    return useCookie(name).value;
+    console.log(useCookie(name)?.value);
+    return useCookie(name)?.value;
   }
 
   static async delete(name) {
-    useCookie(name).value = null;
+    if (useCookie(name).value) useCookie(name).value = null;
   }
 }

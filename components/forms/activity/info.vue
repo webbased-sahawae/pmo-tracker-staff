@@ -14,7 +14,7 @@
           max="1"
           min="0"
           :value="!activity.info.isMain ? 0 : 1"
-          class="w-10 p-0 h-5 accent-green-500"
+          class="w-10 p-0 h-5 accent-complete"
         />
         <div>
           {{ activity.info.isMain ? "Main Activity" : "Side Activity" }}

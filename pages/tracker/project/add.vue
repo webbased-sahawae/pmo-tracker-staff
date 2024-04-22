@@ -1,6 +1,5 @@
 <template>
-  <div>
-    {{ trace }}
+  <div class="w-full">
     <Head
       ><Title>
         {{ PartnerDetail?.name }}
@@ -17,6 +16,6 @@ const { data: PartnerDetail, status } = await useFetch(
   `${BASE_URL}/partner/${trace.value.PartnerId}`
 );
 
-console.log(trace.value.PartnerId);
-onMounted(async () => {});
+// console.log(trace.value.PartnerId);
+// onMounted(async () => {});
 </script>

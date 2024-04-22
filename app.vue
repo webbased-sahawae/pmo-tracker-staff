@@ -1,8 +1,5 @@
 <template>
-  <div class="pb-8">
-    <!-- {{ dataProgram }} -->
-    <Header />
-
+  <div>
     <NuxtPage />
   </div>
 </template>
@@ -97,7 +94,3 @@ select,
   transition-duration: 500ms;
 }
 </style>
-<script setup>
-console.log(useRouter());
-// const { dataProgram } = useProgram();
-</script>

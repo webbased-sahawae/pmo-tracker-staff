@@ -438,7 +438,7 @@ const submitProgram = async () => {
     console.log(responseData);
     if (!stayPage.value || dataProgram.value.program.id) {
       console.log("move!!!");
-      await navigateTo(`/program/${trace.value.PartnerId}`);
+      await navigateTo(`/tracker/assignment/${trace.value.PartnerId}`);
     } else
       dataProgram.value = {
         program: { PartnerId: trace.value.PartnerId },

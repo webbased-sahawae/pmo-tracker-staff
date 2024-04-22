@@ -1,6 +1,5 @@
 <template>
-  <div class="p-5 w-full">
-    {{ trace }}
+  <div class="px-6 py-4 w-full">
     <img src="../assets/logo/kadin.png" width="50" />
   </div>
 </template>

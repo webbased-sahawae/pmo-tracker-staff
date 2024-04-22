@@ -16,8 +16,7 @@ const handleLoginSuccess = (response) => {
   const { credential } = response;
   useICookie.set("access_token", credential);
   return navigateTo({
-    path: "/program",
-    query: { PartnerId: "8ca69da3-4f05-4768-8748-89a04a536aed" },
+    path: "/tracker/general-report",
   });
 };
 

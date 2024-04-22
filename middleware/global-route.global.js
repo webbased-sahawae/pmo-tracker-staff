@@ -12,16 +12,37 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   //   console.log(useICookie.get("access_token"));
   // }
   if (process.client) {
-    if (to.name != "login") {
+    if (to.name == "index") {
+      if (useICookie.get("access_token")) {
+        return await navigateTo("/tracker/general-report");
+      } else return await navigateTo("/login");
+    }
+    if (to.name != "login" && !useICookie.get("access_token"))
+      return await navigateTo("/login");
+    if (to.name == "tracker") {
+      if (useICookie.get("access_token")) {
+        return navigateTo("/tracker/general-report");
+      } else return await navigateTo("/login");
+    }
+    if (to.name != "login" && useICookie.get("access_token")) {
       try {
+        console.log("global");
         const { data, error } = await pmoAPI.getWithAccess("/user/google");
         // console.log(useICookie.get("access_token"));
+        // console.log(data);
         if (error.value) throw error.value;
       } catch (error) {
-        useICookie.delete("access_token");
-        return navigateTo("/login");
+        console.log("global error");
+        await useICookie.delete("access_token");
+        return await navigateTo("/login");
       }
+    } else if (to.name == "login") {
+      await useICookie.delete("access_token");
     }
+    // if (to.matched.length === 0) {
+    //   useICookie.delete("access_token");
+    //   return navigateTo("/login");
+    // }
     // if (
     //   to.name == "project-add" ||
     //   to.name == "program-add" ||

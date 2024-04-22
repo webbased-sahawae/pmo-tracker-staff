@@ -256,8 +256,4 @@ const openContainer = ref({
   attendance: false,
   summary: false,
 });
-
-onMounted(async () => {
-  if (!trace?.value?.PartnerId) await navigateTo("/");
-});
 </script>

@@ -1,16 +1,16 @@
 <template>
-  <div>
-    {{ useRoute().query }}
+  <div class="w-full">
     <select
       @change="
         async (e) => {
           await navigateTo({
-            path: '/program',
+            path: '/tracker/assignment',
             query: { PartnerId: e.target.value },
           });
         }
       "
     >
+      <option disabled selected>Seluruh Bidang/Badan</option>
       <option
         v-for="item in PartnerList"
         :value="item.id"
@@ -28,7 +28,7 @@
         <!-- {{ ProgramPartner }} -->
         <div
           class="buttonAdd"
-          @click.prevent="() => navigateTo('/program/add/')"
+          @click.prevent="() => navigateTo('/tracker/assignment/add/')"
         >
           <p class="">+ Program</p>
         </div>
@@ -43,7 +43,7 @@
         <div class="flex flex-col justify-start gap-2 p-2">
           <div
             class="buttonAdd"
-            @click.prevent="() => navigateTo('/project/add/')"
+            @click.prevent="() => navigateTo('/tracker/project/add/')"
           >
             + Program tambahan diluar rapimnas
           </div>
@@ -73,7 +73,7 @@
         <div class="flex flex-col justify-start gap-2 p-2">
           <div
             class="buttonAdd"
-            @click.prevent="() => navigateTo('/activity/add/')"
+            @click.prevent="() => navigateTo('/tracker/activity/add/')"
           >
             + Aktifitas diluar Program
           </div>
@@ -104,6 +104,7 @@ const data = ref({
   ProjectsNonProgram: [],
   PartnerDetail: {},
 });
+
 // trace.value.ProgramId && delete trace.value.ProgramId;
 // console.log(useRoute());
 watch(useRoute(), async (val) => {
@@ -125,7 +126,8 @@ watch(useRoute(), async (val) => {
     );
 
     data.value.PartnerDetail = PartnerDetail.value;
-    trace.value.PartnerId = val.query.PartnerId;
+
+    if (val.query.PartnerId) trace.value.PartnerId = val.query.PartnerId;
   } catch (error) {
     console.log(error);
   }

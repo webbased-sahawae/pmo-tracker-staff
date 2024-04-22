@@ -32,7 +32,7 @@
       </div>
     </div>
     <div
-      class="flex flex-col items-center xl:flex-row xl:items-start xl:justify-center gap-2 overflow-hidden w-[100vw]"
+      class="flex flex-col items-center xl:flex-row xl:items-start xl:justify-center gap-2 overflow-hidden w-full"
     >
       <div
         :class="`border-4 duration-1000 xl:max-w-[50vw] rounded-2xl p-2 w-[100vw]`"
@@ -98,7 +98,7 @@
           <div class="xl:hidden block">
             <div
               v-if="!detailOpen"
-              class="cursor-pointer flex gap-1 hover:text-green-500"
+              class="cursor-pointer flex gap-1 hover:text-complete"
               @click.prevent="detailOpen = !detailOpen"
             >
               <IconsInformation width="1em" /> More detail ...
@@ -194,7 +194,7 @@
           @click.prevent="
             () => {
               trace.ProjectId = ProjectId;
-              navigateTo('/activity/add');
+              navigateTo('/tracker/activity/add');
             }
           "
         >
@@ -266,24 +266,24 @@ const dates = (startTime, endTime) => {
 const projectStatus = () => {
   if (ProjectDetail.value.status > 80)
     return {
-      BarColor: "accent-green-500",
+      BarColor: "accent-complete",
       title: "Very Impactful",
-      text: "text-green-500",
-      border: "border-green-500",
+      text: "text-complete",
+      border: "border-complete",
     };
   else if (ProjectDetail.value.status > 40)
     return {
-      BarColor: "accent-orange-500",
-      text: "text-orange-500",
+      BarColor: "accent-ongoing",
+      text: "text-ongoing",
       title: "Highly Impactful",
-      border: "border-orange-500",
+      border: "border-ongoing",
     };
   else
     return {
-      BarColor: "accent-gray-500",
-      text: "text-gray-500",
+      BarColor: "accent-stop",
+      text: "text-stop",
       title: "Impactful",
-      border: "border-gray-500",
+      border: "border-stop",
     };
 };
 
@@ -293,11 +293,12 @@ const deleteProject = async () => {
       method: "delete",
       watch: false,
     });
-    await navigateTo(`/program/${trace.value.PartnerId}`);
+    await navigateTo(`/tracker/assignment/${trace.value.PartnerId}`);
   } catch (error) {
     console.log(error);
   }
 };
+
 onMounted(async () => {
   trace.value.ProjectId = ProjectId;
 });

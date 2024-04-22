@@ -11,7 +11,7 @@
       "
     />
     <div
-      class="cursor-pointer border-2 rounded-full border-orange-500 px-2 hover:text-white hover:bg-orange-500"
+      class="cursor-pointer border-2 rounded-full border-ongoing px-2 hover:text-white hover:bg-ongoing"
       @click.prevent="
         () => {
           sendFile();
@@ -37,7 +37,7 @@ const sendFile = async () => {
       body: formData,
     });
     emit("setModal", false);
-    // navigateTo(`/project/${ProjectId}`);
+    // navigateTo(`/tracker/project/${ProjectId}`);
     // window.location.reload(true);
     // console.log("move");
   } catch (error) {

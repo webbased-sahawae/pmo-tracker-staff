@@ -1,5 +1,3 @@
 <template>
-  <div></div>
+  <div>PMO TRACKER</div>
 </template>
-
-<script setup></script>
