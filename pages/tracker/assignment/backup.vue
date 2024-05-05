@@ -10,6 +10,7 @@
         }
       "
     >
+      <option disabled selected>Seluruh Bidang/Badan</option>
       <option
         v-for="item in PartnerList"
         :value="item.id"
@@ -31,10 +32,10 @@
         >
           <p class="">+ Program</p>
         </div>
+
         <CardsProgramDetail
           v-for="program in data.ProgramPartner"
           :data="program"
-          :key="program.id"
         />
       </div>
       <div class="primeBox w-full h-full">
@@ -46,21 +47,19 @@
           >
             + Program tambahan diluar rapimnas
           </div>
-          <!-- {{ data.ProjectsNonProgram }} -->
           <div class="flex gap-2">
             <div
               v-for="project in data.ProjectsNonProgram"
               class="md:w-[23vw] w-screen"
-              :key="project.id"
             >
-              <!-- {{ project }} -->
               <CardsMiniProject
                 :ProjectId="project.id"
                 :title="project.title"
                 :projectCategory="project.Category.name"
+                :status="project.status"
                 :startDate="project.start"
                 :endDate="project.end"
-                :sinergy="project.Partners"
+                :sinergy="project.PartnerProjects"
                 :logoId="project.image && project.id"
               />
             </div>
@@ -84,7 +83,7 @@
               :key="activity.id"
               :class="`cursor-pointer w-[23vw]`"
             >
-              <!-- <CardsMiniActivity :activity="activity" /> -->
+              <CardsMiniActivity :activity="activity" />
             </div>
           </div>
         </div>
@@ -106,26 +105,6 @@ const data = ref({
   PartnerDetail: {},
 });
 
-const { data: ProgramPartner } = await useFetch(
-  `${BASE_URL}/program/department/${PartnerId}`
-);
-data.value.ProgramPartner = ProgramPartner.value;
-const { data: listActivities } = await useFetch(
-  `${BASE_URL}/activity/nonproject/${PartnerId}`
-);
-// console.log(listActivities.value);
-data.value.listActivities = listActivities.value;
-
-const { data: ProjectsNonProgram } = await useFetch(
-  `${BASE_URL}/project/non/${PartnerId}`
-);
-data.value.ProjectsNonProgram = ProjectsNonProgram.value;
-
-const { data: PartnerDetail } = await useFetch(
-  `${BASE_URL}/partner/${PartnerId}`
-);
-data.value.PartnerDetail = PartnerDetail.value;
-trace.value.PartnerId = PartnerId;
 // trace.value.ProgramId && delete trace.value.ProgramId;
 // console.log(useRoute());
 watch(useRoute(), async (val) => {
@@ -165,6 +144,27 @@ const { data: PartnerList } = await useFetch(
 );
 
 onMounted(async () => {
+  const { data: ProgramPartner } = await useFetch(
+    `${BASE_URL}/program/department/${PartnerId}`
+  );
+  // console.log(listActivities.value);
+  data.value.ProgramPartner = ProgramPartner.value;
+  const { data: listActivities } = await useFetch(
+    `${BASE_URL}/activity/nonproject/${PartnerId}`
+  );
+  data.value.listActivities = listActivities.value;
+
+  const { data: ProjectsNonProgram } = await useFetch(
+    `${BASE_URL}/project/non/${PartnerId}`
+  );
+  data.value.ProjectsNonProgram = ProjectsNonProgram.value;
+
+  const { data: PartnerDetail } = await useFetch(
+    `${BASE_URL}/partner/${PartnerId}`
+  );
+  data.value.PartnerDetail = PartnerDetail.value;
+  trace.value.PartnerId = PartnerId;
+
   console.log("finish mount");
 });
 </script>

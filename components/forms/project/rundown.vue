@@ -201,7 +201,7 @@
         <td class="border-2 text-center">{{ rundown.notes }}</td>
         <td class="border-2 text-center">
           <span
-            class="hover:text-red-500 cursor-pointer font-bold"
+            class="hover:text-stop cursor-pointer font-bold"
             @click.prevent="
               () => {
                 rundown.deletedAt = new Date();

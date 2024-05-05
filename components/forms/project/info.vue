@@ -76,7 +76,7 @@
               <input
                 class="px-2"
                 type="datetime-local"
-                :value="project.project.end"
+                :value="project.project.end || project.project.start"
                 :min="project.project.start"
                 @change="
                   (e) => {

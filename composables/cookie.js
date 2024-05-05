@@ -9,7 +9,7 @@ export default class useICookie {
   }
 
   static get(name) {
-    console.log(useCookie(name)?.value);
+    // console.log(useCookie(name)?.value);
     return useCookie(name)?.value;
   }
 

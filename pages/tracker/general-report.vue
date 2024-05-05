@@ -1,30 +1,66 @@
 <template>
   <div>
+    {{ recapStatus }}
     <div
       class="flex w-full justify-between px-6 py-2 gap-4 mb-2 border-b-2 border-b-dprimary"
     >
       <div
-        class="hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500"
+        :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
+          institutionActive.quarter == 'all' ? 'font-bold text-dsecondary' : ''
+        }`"
+        @click="
+          () => {
+            institutionActive.quarter = 'all';
+          }
+        "
       >
         Overall
       </div>
       <div
-        class="hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-1000"
+        :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
+          institutionActive.quarter == 1 ? 'font-bold text-dsecondary' : ''
+        }`"
+        @click="
+          () => {
+            institutionActive.quarter = 1;
+          }
+        "
       >
         Quarter 1
       </div>
       <div
-        class="hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-1000"
+        :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
+          institutionActive.quarter == 2 ? 'font-bold text-dsecondary' : ''
+        }`"
+        @click="
+          () => {
+            institutionActive.quarter = 2;
+          }
+        "
       >
         Quarter 2
       </div>
       <div
-        class="hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-1000"
+        :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
+          institutionActive.quarter == 3 ? 'font-bold text-dsecondary' : ''
+        }`"
+        @click="
+          () => {
+            institutionActive.quarter = 3;
+          }
+        "
       >
         Quarter 3
       </div>
       <div
-        class="hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-1000"
+        :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-full flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
+          institutionActive.quarter == 4 ? 'font-bold text-dsecondary' : ''
+        }`"
+        @click="
+          () => {
+            institutionActive.quarter = 4;
+          }
+        "
       >
         Quarter 4
       </div>
@@ -37,18 +73,26 @@
           <h2 class="border-b-2 border-b-dprimary w-full flex justify-center">
             Progress Program
           </h2>
-          <div class="flex w-full h-full flex-col justify-center items-center">
+          <div v-if="recapStatus.status == 'pending'" class="flex w-[7vw]">
+            <IconsLoading />
+          </div>
+          <div
+            v-if="recapStatus.status == 'success'"
+            class="flex w-full h-full flex-col justify-center items-center"
+          >
             <span
               :class="`font-bold text-6xl ${
-                projectStatus(percentageProgram).text
+                projectStatus(institutionActive.programPercentage).text
               }`"
-              >{{ percentageProgram }}%</span
+              >{{ institutionActive.programPercentage }}%</span
             >
             <span
               :class="`font-bold text-base italic ${
-                projectStatus(percentageProgram).text
+                projectStatus(institutionActive.programPercentage).text
               }`"
-              >{{ projectStatus(percentageProgram).title }}</span
+              >{{
+                projectStatus(institutionActive.programPercentage).title
+              }}</span
             >
             <div class="flex gap-2 justify-center px-2 w-full">
               <div class="flex flex-col leading-none items-center w-full">
@@ -114,11 +158,10 @@
                 >
                   <td
                     @click="
-                      () =>
-                        (institutionActive = {
-                          id: institution.id,
-                          name: institution.name,
-                        })
+                      () => {
+                        institutionActive.id = institution.id;
+                        institutionActive.name = institution.name;
+                      }
                     "
                     class="cursor-pointer"
                   >
@@ -170,9 +213,12 @@
               Departments
             </div>
           </div>
-          {{ detailTab }}
           <div class="h-full overflow-hidden h-max">
-            <GeneralReportActivities />
+            <GeneralReportActivities
+              v-if="detailTab == 'activities'"
+              :InstitutionId="institutionActive.id"
+              :key="institutionActive.id"
+            />
           </div>
         </div>
         <div></div>
@@ -187,14 +233,45 @@ import {
   SYSTEM_NAME,
 } from "~/constants/ids";
 import { BASE_URL } from "~/constants/urls";
-
-const percentageProgram = ref(50);
+const { trace } = useTrace("trace");
+trace.value = {};
+const recapStatus = ref({ status: "pending", error: null });
 const detailTab = ref("activities");
-const institutionActive = ref({ id: INSTITUTION_ID, name: "KADIN INDONESIA" });
+const institutionActive = ref({
+  id: INSTITUTION_ID,
+  name: "KADIN INDONESIA",
+  quarter: "all",
+  programPercentage: 0,
+});
 const { data: institutionList, status } = await useFetch(
   `${BASE_URL}/institution`
 );
 
+const { data: rawRecap } = await useFetch(
+  `${BASE_URL}/institution/recap/${institutionActive.value.id}`,
+  { query: { quarter: institutionActive.value.quarter, year: "2024" } }
+);
+institutionActive.value.programPercentage = rawRecap.value;
+recapStatus.value.status = status.value;
+watch(institutionActive.value, async () => {
+  try {
+    console.log(institutionActive.value);
+    recapStatus.value.status = "pending";
+
+    const {
+      data: rawRecap,
+      status: newRecapStatus,
+      error,
+    } = await useFetch(
+      `${BASE_URL}/institution/recap/${institutionActive.value.id}`,
+      { query: { quarter: institutionActive.value.quarter, year: "2024" } }
+    );
+    institutionActive.value.programPercentage = rawRecap.value;
+    recapStatus.value = { status: newRecapStatus.value, error };
+  } catch (error) {
+    recapStatus.value = { status: error, error };
+  }
+});
 const projectStatus = (value) => {
   if (value > 80)
     return {

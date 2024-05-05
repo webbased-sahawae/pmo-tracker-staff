@@ -12,7 +12,7 @@
     >
       <div class="flex gap-2" v-if="activityModal">
         <div
-          class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-blue-500 hover:border-x-blue-700 hover:text-white hover:font-bold"
+          class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-ongoing hover:border-x-blue-700 hover:text-white hover:font-bold"
           @click="
             () => {
               activityModal = false;
@@ -22,7 +22,7 @@
           Close
         </div>
         <div
-          class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-red-500 hover:border-x-red-700 hover:text-white hover:font-bold"
+          class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-stop hover:border-x-red-700 hover:text-white hover:font-bold"
         >
           Delete
         </div>
@@ -39,32 +39,22 @@
       >
         <div class="">
           <div>
-            <h2 class="uppercase">
-              {{ activity.title }}
-            </h2>
+            <div class="w-full flex justify-between items-center">
+              <h2 class="uppercase">
+                {{ activity.title }}
+              </h2>
+              <div
+                class="italic font-bold text-sm border-x-2 border-dprimary px-2 rounded-xl"
+              >
+                {{ activity.score }}%
+              </div>
+            </div>
             <div class="text-sm">{{ activity.Category.name }}</div>
             <div class="text-sm">{{ activity.location }}</div>
           </div>
         </div>
         <div class="flex text-sm italic font-bold leading-none">
-          <!-- {{ activity }} -->
-          <div>{{ dates(activity.start, activity.end).date + ", " }}</div>
-
-          <div>
-            {{
-              new Date(activity.start).toLocaleString("default", {
-                timeStyle: "short",
-                hour12: false,
-              })
-            }}
-            -
-            {{
-              new Date(activity.end).toLocaleString("default", {
-                timeStyle: "short",
-                hour12: false,
-              })
-            }}
-          </div>
+          <div>{{ dates(activity.start, activity.end) + ", " }}</div>
         </div>
         <div
           :class="`w-full border-2 rounded-full ${
@@ -110,9 +100,8 @@ const borderStatus = (startDate, summary) => {
     switch (summary) {
       case null:
         return {
-          border: "border-red-500",
-
-          text: "text-white bg-red-500 hover:bg-white hover:text-red-500",
+          border: "border-stop",
+          text: "text-white bg-stop hover:bg-white hover:text-stop",
         };
         break;
       default:
@@ -124,8 +113,8 @@ const borderStatus = (startDate, summary) => {
     }
   } else {
     return {
-      border: "border-blue-500",
-      text: " hover:bg-blue-500 hover:text-white",
+      border: "border-ongoing",
+      text: " hover:bg-ongoing hover:text-white",
     };
   }
 };

@@ -92,31 +92,6 @@
                 />
               </div>
             </div>
-
-            <!-- <div
-              v-for="(item, index) in activity.attendance"
-              class="flex w-full gap-2"
-            >
-              <textarea
-                class="px-2 w-full"
-                :value="activity.attendance[index]"
-                @change="
-                  (e) => {
-                    activity.attendance[index] = e.target.value;
-                  }
-                "
-              />
-              <div
-                class="buttonDelete p-2"
-                @click.prevent="
-                  () => {
-                    activity.attendance.splice(index, 1);
-                  }
-                "
-              >
-                X
-              </div>
-            </div> -->
           </div>
         </div>
       </div>

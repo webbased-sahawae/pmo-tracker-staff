@@ -63,15 +63,17 @@
           </div>
           <div class="flex flex-wrap justify-start gap-2">
             <div v-for="project in Projects" class="md:w-[23vw] w-screen">
+              <!-- {{ project }} -->
+              <!-- {{ project.Partners }} -->
               <CardsMiniProject
                 :ProjectId="project.id"
                 :title="project.title"
                 :projectCategory="project.Category.name"
-                :status="project.status"
                 :startDate="project.start"
                 :endDate="project.end"
-                :sinergy="project.PartnerProjectActivities"
+                :sinergy="project.Partners"
                 :logoId="project.image && project.id"
+                :key="project.id"
               />
             </div>
           </div>

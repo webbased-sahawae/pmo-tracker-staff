@@ -6,7 +6,7 @@
           {{ PartnerDetail?.name }}
         </label>
 
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
           <div class="flex gap-2">
             <div class="flex items-center">Project Status:</div>
             <div :class="`${projectStatus(project.project.status).text}`">
@@ -27,7 +27,7 @@
               }
             "
           />
-        </div>
+        </div> -->
       </div>
       <div class="flex w-[50vw] justify-around gap-2">
         <div
@@ -104,21 +104,38 @@
             Stay on this page after submit
           </div>
           <div class="flex max-w-[100vw] gap-4">
-            <div
-              class="buttonAdd"
+            <button
+              :disabled="
+                !(
+                  project.project.title &&
+                  project.project.start &&
+                  project.project.end &&
+                  project.project.CategoryId
+                )
+              "
+              :class="`${
+                project.project.title &&
+                project.project.start &&
+                project.project.end &&
+                project.project.CategoryId
+                  ? 'buttonAdd'
+                  : 'border-4 border-disable rounded-full text-disable hover:bg-transparent'
+              }`"
               style="width: 100%"
               type="button"
               @click.prevent="submitProject"
             >
               {{ !project?.project?.id ? "Submit" : "Update" }}
-            </div>
+            </button>
+
             <button
               class="buttonDelete"
               style="width: 100%"
               type="button"
               :onclick="
                 () => {
-                  navigateTo({ path: `/program`, query: trace.PartnerId });
+                  warn('coba warning');
+                  // navigateTo({ path: `/assignment`, query: trace.PartnerId });
                 }
               "
             >
@@ -128,10 +145,12 @@
         </div>
       </div>
     </div>
+
     {{ project }}
   </div>
 </template>
 <script setup>
+import { warn } from "vue";
 import { BASE_URL } from "~/constants/urls";
 const { trace } = useTrace();
 const { project } = useProject();
@@ -151,28 +170,17 @@ const setTab = (valInput) => {
 };
 
 const submitProject = async () => {
-  console.log("click submit");
-  if (!project.value.project.title) console.log("input project name");
-  else {
-    console.log("masuk");
-
+  if (
+    project.value.project.title &&
+    project.value.project.start &&
+    project.value.project.end &&
+    project.value.project.CategoryId
+  ) {
     const { data: responseData } = await useFetch(`${BASE_URL}/project`, {
       method: "post",
       body: project.value,
       watch: false,
     });
-    console.log(responseData);
-    await navigateTo({
-      path: "/tracker/assignment",
-      query: { PartnerId: trace.value.PartnerId },
-    });
-    if (!stayPage.value || project.value.id) {
-      console.log("move!!!");
-      await navigateTo({
-        path: "/tracker/assignment",
-        query: { PartnerId: trace.value.PartnerId },
-      });
-    } else resetStateProject();
   }
 };
 const resetStateProject = () => {

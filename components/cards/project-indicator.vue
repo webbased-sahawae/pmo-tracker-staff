@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="font-bold">{{ ProgramIndicator.description }}</div>
+    <div class="font-bold">{{ ProgramIndicator?.description }}</div>
     <div class="">{{ ProgramIndicator.Program.Partner.name }}</div>
     <div class="italic">{{ ProgramIndicator.Program.name }}</div>
 

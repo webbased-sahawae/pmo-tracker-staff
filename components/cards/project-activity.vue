@@ -1,16 +1,15 @@
 <template>
   <div class="mt-4 flex flex-col gap-2">
-    <!-- {{ Activities }} -->
     <div
       :class="`duration-1000 flex gap-2 w-full items-between justify-between`"
     >
       <div
         :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'all' && 'border-ongoing'
+          queryTime == 'all' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
-            showActivity = 'all';
+            queryTime = 'all';
           }
         "
       >
@@ -18,11 +17,11 @@
       </div>
       <div
         :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'past' && 'border-ongoing'
+          queryTime == 'past' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
-            showActivity = 'past';
+            queryTime = 'past';
           }
         "
       >
@@ -30,11 +29,11 @@
       </div>
       <div
         :class="`duration-500 border-grey-200 hover:border-ongoing hover:bg-ongoing hover:text-white border-2 w-full flex justify-center cursor-pointer rounded-2xl ${
-          showActivity == 'future' && 'border-ongoing'
+          queryTime == 'future' && 'border-ongoing'
         }`"
         @click.prevent="
           () => {
-            showActivity = 'future';
+            queryTime = 'future';
           }
         "
       >
@@ -42,12 +41,9 @@
       </div>
     </div>
     <div class="flex flex-col gap-1">
-      <div
-        v-for="activity in Activities[showActivity]"
-        :key="activity.id"
-        :class="`cursor-pointer`"
-      >
-        <CardsMiniActivity :activity="activity" />
+      <div v-for="activity in Activities" :class="`cursor-pointer`">
+        <!-- {{ activity }} -->
+        <CardsMiniActivity :activity="activity" :key="activity.id" />
       </div>
     </div>
   </div>
@@ -56,7 +52,7 @@
 import { BASE_URL, KADIN_LOGO } from "~/constants/urls";
 import { dates } from "~/helpers/get-date.js";
 const activityModal = ref(false);
-const showActivity = ref("all");
+const queryTime = ref("all");
 const { ProjectId } = useRoute().params;
 
 const borderStatus = (startDate, summary) => {
@@ -64,8 +60,8 @@ const borderStatus = (startDate, summary) => {
     switch (summary) {
       case null:
         return {
-          border: "border-red-500",
-          text: "text-white bg-red-500 hover:bg-white hover:text-red-500",
+          border: "border-stop",
+          text: "text-white bg-stop hover:bg-white hover:text-stop",
         };
         break;
       default:
@@ -77,13 +73,25 @@ const borderStatus = (startDate, summary) => {
     }
   } else {
     return {
-      border: "border-blue-500",
-      text: " hover:bg-blue-500 hover:text-white",
+      border: "border-ongoing",
+      text: " hover:bg-ongoing hover:text-white",
     };
   }
 };
+const Activities = ref([]);
 
-const { data: Activities } = await useFetch(
-  `${BASE_URL}/activity/project/${ProjectId}`
+const { data: rawActivities } = await useFetch(
+  `${BASE_URL}/activity/project/${ProjectId}`,
+  {
+    query: { time: queryTime.value },
+  }
 );
+Activities.value = rawActivities.value;
+watch(queryTime, async () => {
+  console.log("Query time: " + queryTime.value);
+  const { data } = await useFetch(`${BASE_URL}/activity/project/${ProjectId}`, {
+    query: { time: queryTime.value },
+  });
+  Activities.value = data.value;
+});
 </script>

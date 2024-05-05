@@ -1,8 +1,6 @@
 <template>
   <div
-    :class="`w-full border-4 pb-2 px-2 rounded-2xl flex flex-col h-full cursor-pointer ${
-      projectStatus(status).hoverborder
-    } transition ease-in-out duration-500`"
+    :class="`w-full border-4 pb-2 px-2 rounded-2xl flex flex-col h-full cursor-pointer transition ease-in-out duration-500`"
     @click.prevent="
       async () => {
         try {
@@ -23,19 +21,21 @@
           class="h-[10vh] w-full object-contain rounded-2xl"
         />
       </div>
-      <div
-        :class="`rounded-full border-4 w-full ${projectStatus(status).border}`"
-      />
+      <div :class="`rounded-full border-4 w-full `" />
     </div>
     <div class="flex flex-col justify-between h-full gap-2">
       <div>
         <h3 class="font-bold text-base text-center">{{ title }}</h3>
         <div class="text-sm italic text-center">{{ projectCategory }}</div>
+        <div>
+          Progress status:
+          <span class="font-bold text-dprimary"> {{ ProjectScores }}% </span>
+        </div>
         <div class="text-sm">{{ dates() }}</div>
       </div>
       <div>
         Latest activity:
-        <div class="text-sm italic text-red-500">
+        <div class="text-sm italic text-stop">
           {{
             Math.ceil(
               (new Date() - new Date("02/27/2024")) / (1000 * 60 * 60 * 24)
@@ -54,16 +54,14 @@
         <div v-for="institution in institutions">
           <div
             v-if="
-              sinergy.filter(
-                (el) => el.Partner.Institution.id == institution.id
-              ).length
+              sinergy.filter((el) => el.Institution.id == institution.id).length
             "
           >
+            <!-- {{ sinergy }} -->
             <span class="font-bold">
               {{
-                sinergy.filter(
-                  (el) => el.Partner.Institution.id == institution.id
-                ).length
+                sinergy.filter((el) => el.Institution.id == institution.id)
+                  .length
               }}
             </span>
             {{ institution.name }}
@@ -110,7 +108,6 @@ const {
   logoId,
   title,
   projectCategory,
-  status,
   startDate,
   endDate,
   sinergy,
@@ -119,12 +116,14 @@ const {
   "logoId",
   "title",
   "projectCategory",
-  "status",
   "startDate",
   "endDate",
   "sinergy",
 ]);
 
+const { data: ProjectScores } = await useFetch(
+  `${BASE_URL}/project/scores/${ProjectId}`
+);
 const dates = () => {
   const start = new Date(startDate);
   const end = new Date(endDate);

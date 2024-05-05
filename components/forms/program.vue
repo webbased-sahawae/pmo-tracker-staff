@@ -210,7 +210,7 @@
           )"
         >
           <div
-            class="cursor-pointer hover:text-red-500"
+            class="cursor-pointer hover:text-stop"
             @click.prevent="
               () => {
                 item.deletedAt = new Date();

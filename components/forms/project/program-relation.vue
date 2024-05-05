@@ -40,7 +40,7 @@
           <div class="rounded-2xl border-4">
             <div
               v-for="item in listKPI"
-              class="hover:bg-blue-500 rounded-2xl p-2 cursor-pointer hover:text-white"
+              class="hover:bg-ongoing rounded-2xl p-2 cursor-pointer hover:text-white"
               @click.prevent="
                 {
                   !project.ProjectIndicators.map((el) =>
@@ -76,9 +76,10 @@
           v-for="item in project.ProjectIndicators.filter(
             (el) => !el.deletedAt
           )"
+          :key="item.ProgramIndicatorId"
         >
           <div
-            class="hover:text-red-500 cursor-pointer"
+            class="hover:text-stop cursor-pointer"
             @click.prevent="() => (item.deletedAt = new Date())"
           >
             <CardsProjectIndicator :data="item" />

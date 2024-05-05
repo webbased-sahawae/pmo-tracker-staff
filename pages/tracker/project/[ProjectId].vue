@@ -17,7 +17,7 @@
         >
           <h2 class="uppercase text-center w-full">Upload Logo</h2>
           <IconsCross
-            class="cursor-pointer hover:text-red-500 hover:font-bold"
+            class="cursor-pointer hover:text-stop hover:font-bold"
             width="1em"
             @click.prevent="
               () => {
@@ -38,7 +38,17 @@
         :class="`border-4 duration-1000 xl:max-w-[50vw] rounded-2xl p-2 w-[100vw]`"
       >
         <div class="flex w-full gap-4 my-2 w-[50%]">
-          <div class="buttonAdd px-2" style="width: 100%">Edit</div>
+          <div
+            class="buttonAdd px-2"
+            style="width: 100%"
+            @click="
+              () => {
+                navigateTo('/tracker/project/edit');
+              }
+            "
+          >
+            Edit
+          </div>
           <div
             class="buttonDelete px-2"
             style="width: 100%"
@@ -72,9 +82,14 @@
                 <h1>
                   {{ ProjectDetail.title }}
                 </h1>
-                <h3 :class="`${projectStatus().text}`">
-                  {{ projectStatus().title }}
+                <h3
+                  v-if="ProjectDetail.ProjectScores"
+                  :class="`${projectStatus().text}`"
+                >
+                  {{ projectStatus().title }}:
+                  {{ ProjectDetail.ProjectScores }}%
                 </h3>
+
                 <p class="text-sm italic">{{ ProjectDetail.Category.name }}</p>
                 <div class="flex items-center gap-1 font-bold">
                   <IconsLocation width="1em" />{{ ProjectDetail.location }}
@@ -106,7 +121,7 @@
             </div>
             <div
               v-if="detailOpen"
-              class="cursor-pointer flex gap-1 hover:text-red-500"
+              class="cursor-pointer flex gap-1 hover:text-stop"
               @click.prevent="detailOpen = !detailOpen"
             >
               <IconsInformation width="1em" /> Less detail ...
@@ -188,21 +203,49 @@
           </div>
         </div>
       </div>
-      <div class="border-4 xl:w-[25vw] hidden xl:block rounded-2xl p-2">
-        <div
-          class="buttonAdd"
-          @click.prevent="
-            () => {
-              trace.ProjectId = ProjectId;
-              navigateTo('/tracker/activity/add');
-            }
-          "
-        >
-          + Activity
+      <div class="flex flex-col gap-2">
+        <div class="border-4 xl:w-[25vw] hidden xl:block rounded-2xl p-2">
+          <h2>Project Sinergy</h2>
+          <div v-for="institution in institutionList" :key="institution.id">
+            <div
+              v-if="
+                ProjectDetail.Partners.filter(
+                  (el) => el.Institution.id == institution.id
+                ).length
+              "
+            >
+              <ul class="font-bold">
+                {{
+                  institution.name
+                }}
+              </ul>
+              <li
+                v-for="(partner, index) in ProjectDetail.Partners.filter(
+                  (el) => el.Institution.id == institution.id
+                )"
+              >
+                {{ partner.name }}
+              </li>
+            </div>
+          </div>
         </div>
-        <CardsProjectActivity />
+        <div class="border-4 xl:w-[25vw] hidden xl:block rounded-2xl p-2">
+          <div
+            v-if="trace.PartnerId"
+            class="buttonAdd"
+            @click.prevent="
+              () => {
+                trace.ProjectId = ProjectId;
+                navigateTo('/tracker/activity/add');
+              }
+            "
+          >
+            + Activity
+          </div>
+
+          <CardsProjectActivity />
+        </div>
       </div>
-      <!-- {{ ProjectDetail }} -->
     </div>
   </div>
 </template>
@@ -215,7 +258,6 @@ const detailOpen = ref(false);
 const imageUpload = ref(false);
 const rundownExpand = ref(false);
 const updateModalValue = (value) => {
-  console.log("emits?");
   imageUpload.value = value;
 };
 const { data: ProjectDetail } = await useFetch(
@@ -264,14 +306,14 @@ const dates = (startTime, endTime) => {
 };
 
 const projectStatus = () => {
-  if (ProjectDetail.value.status > 80)
+  if (ProjectDetail.value.ProjectScores > 80)
     return {
       BarColor: "accent-complete",
       title: "Very Impactful",
       text: "text-complete",
       border: "border-complete",
     };
-  else if (ProjectDetail.value.status > 40)
+  else if (ProjectDetail.value.ProjectScores > 40)
     return {
       BarColor: "accent-ongoing",
       text: "text-ongoing",
@@ -298,7 +340,9 @@ const deleteProject = async () => {
     console.log(error);
   }
 };
-
+const { data: institutionList, status } = await useFetch(
+  `${BASE_URL}/institution`
+);
 onMounted(async () => {
   trace.value.ProjectId = ProjectId;
 });

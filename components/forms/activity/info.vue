@@ -21,18 +21,37 @@
         </div>
       </div>
 
-      <div class="flex flex-col">
-        <label>Activity name</label
-        ><input
-          class="px-2"
-          placeholder="Project name"
-          :value="activity.info.title"
-          @keyup="
-            (e) => {
-              activity.info.title = e.target.value;
-            }
-          "
-        />
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col leading-none">
+          <label>Activity name</label
+          ><input
+            class="px-2"
+            placeholder="Activity name"
+            :value="activity.info.title"
+            @keyup="
+              (e) => {
+                activity.info.title = e.target.value;
+              }
+            "
+          />
+        </div>
+
+        <div class="flex flex-col leading-none">
+          <label>Activity score</label>
+          <input
+            class="px-2"
+            placeholder="Activity score"
+            type="number"
+            min="0"
+            max="100"
+            :value="activity.info.score"
+            @keyup="
+              (e) => {
+                activity.info.score = e.target.value;
+              }
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-col">
         <label>Venue</label

@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import routes from "./data/routes.json";
+// import routes from "./data/routes.json";
 
 export default defineNuxtConfig({
   modules: ["nuxt-vue3-google-signin"],
