@@ -1,6 +1,8 @@
 <template>
   <div
-    :class="`w-full border-4 pb-2 px-2 rounded-2xl flex flex-col h-full cursor-pointer transition ease-in-out duration-500`"
+    :class="`w-full border-4 pb-2 px-2 rounded-2xl flex flex-col h-full cursor-pointer transition ease-in-out duration-500 ${
+      projectStatus(ProjectScores).border
+    }`"
     @click.prevent="
       async () => {
         try {
@@ -21,13 +23,17 @@
           class="h-[10vh] w-full object-contain rounded-2xl"
         />
       </div>
-      <div :class="`rounded-full border-4 w-full `" />
+      <div
+        :class="`rounded-full border-4 w-full ${
+          projectStatus(ProjectScores).border
+        }`"
+      />
     </div>
     <div class="flex flex-col justify-between h-full gap-2">
       <div>
         <h3 class="font-bold text-base text-center">{{ title }}</h3>
         <div class="text-sm italic text-center">{{ projectCategory }}</div>
-        <div>
+        <div v-if="ProjectScores">
           Progress status:
           <span class="font-bold text-dprimary"> {{ ProjectScores }}% </span>
         </div>

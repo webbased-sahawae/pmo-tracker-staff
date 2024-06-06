@@ -95,14 +95,14 @@
         </div>
         <div>
           <!-- {{ stayPage }} -->
-          <div
+          <!-- <div
             @click.prevent="stayPage = !stayPage"
             class="cursor-pointer"
             v-if="project?.project?.id"
           >
             <input type="checkbox" :checked="stayPage" />
             Stay on this page after submit
-          </div>
+          </div> -->
           <div class="flex max-w-[100vw] gap-4">
             <button
               :disabled="
@@ -135,7 +135,10 @@
               :onclick="
                 () => {
                   warn('coba warning');
-                  // navigateTo({ path: `/assignment`, query: trace.PartnerId });
+                  navigateTo({
+                    path: `/tracker/assignment`,
+                    query: { PartnerId: trace.PartnerId },
+                  });
                 }
               "
             >
@@ -180,6 +183,11 @@ const submitProject = async () => {
       method: "post",
       body: project.value,
       watch: false,
+    });
+
+    await navigateTo({
+      path: "/tracker/assignment",
+      query: { PartnerId: trace.value.PartnerId },
     });
   }
 };

@@ -37,7 +37,7 @@
       <div
         :class="`border-4 duration-1000 xl:max-w-[50vw] rounded-2xl p-2 w-[100vw]`"
       >
-        <div class="flex w-full gap-4 my-2 w-[50%]">
+        <div v-if="trace.PartnerId" class="flex w-full gap-4 my-2 w-[50%]">
           <div
             class="buttonAdd px-2"
             style="width: 100%"
@@ -101,6 +101,11 @@
                 </div>
                 <div
                   class="flex items-center mt-1 gap-1 cursor-pointer hover:font-bold"
+                  @click="
+                    () => {
+                      navigateTo('www.google.com');
+                    }
+                  "
                 >
                   <img
                     src="https://mailmeteor.com/logos/assets/PNG/Google_Drive_Logo_512px.png"
@@ -220,9 +225,18 @@
                 }}
               </ul>
               <li
+                class="cursor-pointer"
                 v-for="(partner, index) in ProjectDetail.Partners.filter(
                   (el) => el.Institution.id == institution.id
                 )"
+                @click="
+                  () => {
+                    navigateTo({
+                      path: '/tracker/partner',
+                      query: { PartnerId: partner.id },
+                    });
+                  }
+                "
               >
                 {{ partner.name }}
               </li>

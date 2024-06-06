@@ -9,7 +9,7 @@ export const useActivity = () => {
       },
       // outcome: [],
       // attendance: [],
-      discussion: [],
+      Discussions: [],
       // todo: [],
       summary: "",
     };

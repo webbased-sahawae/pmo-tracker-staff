@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ recapStatus }}
     <div
       class="flex w-full justify-between px-6 py-2 gap-4 mb-2 border-b-2 border-b-dprimary"
     >
@@ -77,7 +76,19 @@
             <IconsLoading />
           </div>
           <div
-            v-if="recapStatus.status == 'success'"
+            v-if="
+              recapStatus.status == 'success' &&
+              !institutionActive.programPercentage
+            "
+            class="flex w-full h-full justify-center items-center uppercase font-bold"
+          >
+            No Program recorded
+          </div>
+          <div
+            v-if="
+              recapStatus.status == 'success' &&
+              institutionActive.programPercentage
+            "
             class="flex w-full h-full flex-col justify-center items-center"
           >
             <span
@@ -94,7 +105,7 @@
                 projectStatus(institutionActive.programPercentage).title
               }}</span
             >
-            <div class="flex gap-2 justify-center px-2 w-full">
+            <!-- <div class="flex gap-2 justify-center px-2 w-full">
               <div class="flex flex-col leading-none items-center w-full">
                 <span class="text-nowrap"
                   ><span class="text-xl font-bold text-stop">10</span> Project
@@ -121,7 +132,7 @@
                   >Very Impactful</span
                 >
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div
@@ -156,7 +167,7 @@
                     (el) => el.id != institutionActive.id
                   )"
                 >
-                  <td
+                  <!-- <td
                     @click="
                       () => {
                         institutionActive.id = institution.id;
@@ -164,7 +175,8 @@
                       }
                     "
                     class="cursor-pointer"
-                  >
+                  > -->
+                  <td>
                     {{ institution.name }}
                   </td>
                   <td>:</td>

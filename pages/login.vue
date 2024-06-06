@@ -30,7 +30,9 @@
 <script setup>
 import { GoogleSignInButton } from "vue3-google-signin";
 import useICookie from "~/composables/cookie";
+import pmoAPI from "~/composables/rest-api";
 import { SYSTEM_DESCRIPTION, SYSTEM_NAME } from "~/constants/ids";
+import { BASE_URL } from "~/constants/urls";
 
 useSeoMeta({
   title: `${SYSTEM_NAME} ${new Date().getFullYear()}`,
@@ -43,12 +45,25 @@ useSeoMeta({
 });
 
 // handle success event
-const handleLoginSuccess = (response) => {
-  const { credential } = response;
-  useICookie.set("access_token", credential);
-  return navigateTo({
-    path: "/tracker/general-report",
-  });
+const handleLoginSuccess = async (response) => {
+  try {
+    const { credential } = response;
+    const { data: access_token, error } = await pmoAPI.login(credential);
+    console.log(
+      "================================================================"
+    );
+    console.log(access_token.value);
+    console.log(
+      "================================================================"
+    );
+    await useICookie.set("access_token", access_token.value);
+    console.log("error" + error.value);
+    await navigateTo({
+      path: "/tracker/general-report",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // handle an error event

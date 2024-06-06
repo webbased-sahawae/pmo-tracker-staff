@@ -134,6 +134,26 @@
           </div>
         </div>
       </div>
+      <div class="flex">
+        Page:
+        <div class="flex gap-2">
+          <div
+            v-for="(n, index) in Activities.last_page"
+            :class="`cursor-pointer ${
+              Activities.current_page - 1 == index
+                ? 'font-bold text-dsecondary'
+                : ''
+            }`"
+            @click="
+              () => {
+                queries.page = index + 1;
+              }
+            "
+          >
+            {{ index + 1 }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

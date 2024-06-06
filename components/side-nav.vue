@@ -15,8 +15,18 @@
       @click="
         () => {
           navigateTo(
-            '/tracker/assignment?PartnerId=8ca69da3-4f05-4768-8748-89a04a536aed'
+            '/tracker/partner?PartnerId=8ca69da3-4f05-4768-8748-89a04a536aed'
           );
+        }
+      "
+    >
+      Report Bidang / Badan
+    </div>
+    <div
+      class="text-nowrap text-secondary cursor-pointer border-y-dprimary hover:text-primary hover:border-y-[#FFF] duration-1000 border-y-2 px-4"
+      @click="
+        () => {
+          navigateTo('/tracker/assignment');
         }
       "
     >

@@ -50,17 +50,6 @@
             openProject ? 'max-h-[150vh] p-2 ' : 'max-h-[0vh]'
           }`"
         >
-          <div
-            class="buttonAdd"
-            @click.prevent="
-              () => {
-                trace.ProgramId = data.id;
-                navigateTo('/tracker/project/add/');
-              }
-            "
-          >
-            <p class="">+ PROJECT / ACTIVITY</p>
-          </div>
           <div class="flex flex-wrap justify-start gap-2">
             <div v-for="project in Projects" class="md:w-[23vw] w-screen">
               <!-- {{ project }} -->

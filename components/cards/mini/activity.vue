@@ -12,6 +12,12 @@
     >
       <div class="flex gap-2" v-if="activityModal">
         <div
+          class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-stop hover:border-x-red-700 hover:text-white hover:font-bold"
+          @click="editActivity"
+        >
+          Edit
+        </div>
+        <div
           class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-ongoing hover:border-x-blue-700 hover:text-white hover:font-bold"
           @click="
             () => {
@@ -23,6 +29,7 @@
         </div>
         <div
           class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-stop hover:border-x-red-700 hover:text-white hover:font-bold"
+          @click="deleteActivity"
         >
           Delete
         </div>
@@ -45,6 +52,7 @@
               </h2>
               <div
                 class="italic font-bold text-sm border-x-2 border-dprimary px-2 rounded-xl"
+                v-if="activity.ProjectId"
               >
                 {{ activity.score }}%
               </div>
@@ -62,20 +70,21 @@
           }`"
         />
       </div>
+
       <div v-if="activityModal" class="px-4">
         <h2>Discussion Points</h2>
         <div class="flex flex-col gap-2">
           <div
-            v-for="(discussion, index) in activity.Discussions"
+            v-for="(Discussions, index) in activity.Discussions"
             :class="`border-x-4 px-2 rounded-xl ${
               borderStatus(activity.start, activity.summary).border
             }`"
           >
             <div class="flex">
-              <h2>{{ index + 1 }}. {{ discussion.topic }}</h2>
-              <div v-if="discussion.speaker">- {{ discussion.speaker }}</div>
+              <h2>{{ index + 1 }}. {{ Discussions.topic }}</h2>
+              <div v-if="Discussions.speaker">- {{ Discussions.speaker }}</div>
             </div>
-            <p>{{ discussion.description }}</p>
+            <p>{{ Discussions.description }}</p>
           </div>
         </div>
       </div>
@@ -90,11 +99,30 @@
 </template>
 <script setup>
 const { activity } = defineProps(["activity"]);
+const { activity: activityDetail } = useActivity();
 
+import { BASE_URL } from "~/constants/urls";
 import { dates } from "~/helpers/get-date.js";
 const activityModal = ref(false);
 const { ProjectId } = useRoute().params;
+const editActivity = async () => {
+  activityDetail.value.info = activity;
+  delete activityDetail.value.info.Discussions;
+  activityDetail.value.Discussions = activity.Discussions || [];
+  await navigateTo("/tracker/activity/edit");
+  // console.log(activityDetail.value.info);
+};
 
+const deleteActivity = async () => {
+  try {
+    // console.log(activity.id);
+    await useFetch(`${BASE_URL}/activity/${activity.id}`, { method: "DELETE" });
+    activityModal.value = false;
+    await refreshNuxtData();
+  } catch (error) {
+    console.log(error);
+  }
+};
 const borderStatus = (startDate, summary) => {
   if (new Date(startDate) <= new Date()) {
     switch (summary) {
@@ -103,13 +131,12 @@ const borderStatus = (startDate, summary) => {
           border: "border-stop",
           text: "text-white bg-stop hover:bg-white hover:text-stop",
         };
-        break;
+
       default:
         return {
           border: "border-complete",
           text: " hover:bg-complete hover:text-white",
         };
-        break;
     }
   } else {
     return {

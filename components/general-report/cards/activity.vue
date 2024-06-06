@@ -1,10 +1,17 @@
 <template>
   <div :class="`border-4 rounded-2xl px-2 flex ${isNotComplete()?.class}`">
-    <div class="w-[10%]">
+    <div class="w-[10%] flex justify-center items-center">
       <img
-        v-if="!isNotComplete()?.isTrue"
+        v-if="!isNotComplete()?.isTrue && !image"
         src="../../../assets/logo/kadin.png"
       />
+
+      <img
+        v-if="!isNotComplete()?.isTrue && image"
+        :src="`${BASE_URL}/project/image/${data.Project.id}`"
+        class="xl:max-h-[5em]"
+      />
+      <!-- {{ image }} -->
       <div class="flex justify-center items-center text-pred">
         <IconsWarning v-if="isNotComplete()?.isTrue" />
       </div>
@@ -33,8 +40,26 @@
   </div>
 </template>
 <script setup>
+import { BASE_URL } from "~/constants/urls";
 import { dates } from "~/helpers/get-date";
 const { data } = defineProps(["data"]);
+const image = ref(false);
+
+if (data.Project?.id) {
+  const { data: imagedata, status } = await useFetch(
+    `${BASE_URL}/project/image/${data.Project.id}`,
+    { responseType: "json" }
+  );
+  console.log(status.value);
+  if (status.value == "success") image.value = true;
+}
+// console.log(status.value);
+// if (status.value == "success")
+//   image.value = btoa(String.fromCharCode(...new Uint8Array(imagedata.value)));
+// console.log(image.value);
+
+// console.log(Buffer.from(imagedata));
+
 // console.log(data.summary);
 const isNotComplete = () => {
   if (!data.summary && new Date(data.start) < new Date())

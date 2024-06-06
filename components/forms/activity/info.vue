@@ -36,7 +36,7 @@
           />
         </div>
 
-        <div class="flex flex-col leading-none">
+        <div class="flex flex-col leading-none" v-if="trace.ProjectId">
           <label>Activity score</label>
           <input
             class="px-2"
@@ -194,6 +194,7 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls";
+const { trace } = useTrace();
 
 const { activity } = useActivity();
 const { data: categories } = await useFetch(`${BASE_URL}/category`);
@@ -201,13 +202,20 @@ const { data: categories } = await useFetch(`${BASE_URL}/category`);
 onUnmounted(() => {
   activity.value = {
     info: {
-      flyer: false,
-      photo: false,
-      video: false,
-      release: false,
+      id: null,
+      title: null,
+      location: null,
+      CategoryId: null,
+      PartnerId: null,
+      ProjectId: null,
+      start: null,
+      // score: 0,
+      end: null,
+      summary: null,
+      isMain: false,
     },
 
-    discussion: [],
+    Discussions: [],
 
     summary: "",
   };

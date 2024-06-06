@@ -123,14 +123,16 @@
       <!-- Discussion -->
       <div>
         <div
-          @click.prevent="openContainer.discussion = !openContainer.discussion"
-          :class="`cursor-pointer ${openContainer.discussion && 'font-bold'}`"
+          @click.prevent="
+            openContainer.Discussions = !openContainer.Discussions
+          "
+          :class="`cursor-pointer ${openContainer.Discussions && 'font-bold'}`"
         >
           Discussion Points
         </div>
         <div
           :class="`primeBox duration-1000 overflow-hidden ${
-            openContainer.discussion ? 'max-h-[150vh]' : 'max-h-[0vh]'
+            openContainer.Discussions ? 'max-h-[150vh]' : 'max-h-[0vh]'
           }`"
         >
           <div class="flex flex-col gap-2 p-2">
@@ -138,7 +140,7 @@
               class="buttonAdd"
               @click.prevent="
                 () =>
-                  activity.discussion.push({
+                  activity.Discussions.push({
                     createdAt: new Date(),
                     updatedAt: new Date(),
                   })
@@ -147,8 +149,8 @@
               + Discussion
             </div>
             <div
-              v-for="(item, index) in activity.discussion.filter(
-                (el) => !el.deletedAt
+              v-for="(item, index) in activity.Discussions.filter(
+                (el) => !el?.deletedAt
               )"
               class="flex w-full gap-2"
             >
@@ -251,7 +253,7 @@ const { data: ProjectDetail } = await useFetch(
 
 const openContainer = ref({
   info: false,
-  discussion: false,
+  Discussions: false,
   outcome: false,
   todo: false,
   attendance: false,
