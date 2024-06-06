@@ -167,15 +167,6 @@
                     (el) => el.id != institutionActive.id
                   )"
                 >
-                  <!-- <td
-                    @click="
-                      () => {
-                        institutionActive.id = institution.id;
-                        institutionActive.name = institution.name;
-                      }
-                    "
-                    class="cursor-pointer"
-                  > -->
                   <td>
                     {{ institution.name }}
                   </td>
