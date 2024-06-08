@@ -1,104 +1,107 @@
 <template>
-  <div class="w-full">
-    <select
-      @change="
-        async (e) => {
-          await navigateTo({
-            path: '/tracker/assignment',
-            query: { PartnerId: e.target.value },
-          });
-        }
-      "
-    >
-      <option
-        v-for="item in PartnerList"
-        :value="item.id"
-        :selected="PartnerId == item.id"
+  <div>
+    <div v-if="!PartnerList.length">You have no Assignment!</div>
+    <div class="w-full" v-if="PartnerList.length">
+      <select
+        @change="
+          async (e) => {
+            await navigateTo({
+              path: '/tracker/assignment',
+              query: { PartnerId: e.target.value },
+            });
+          }
+        "
       >
-        {{ item.name }}
-      </option>
-    </select>
-    <div v-if="dataLoad == 'success'">
-      <div class="flex flex-col items-center gap-2 leading-none mb-6">
-        <h1 class="line-none">{{ data.PartnerDetail.name }}</h1>
-        <span class="italic line-none">{{ data.PartnerDetail.chief }}</span>
-      </div>
-      <div class="flex flex-col gap-2 px-4">
-        <div class="primeBox w-full p-2 gap-2 flex flex-col">
-          <div class="font-bold">Program Rapimnas</div>
-          <!-- {{ ProgramPartner }} -->
-
-          <div
-            class="buttonAdd"
-            @click.prevent="() => navigateTo('/tracker/assignment/add/')"
-          >
-            <p class="">+ Program</p>
-          </div>
-          <CardsProgramDetail
-            v-for="program in data.ProgramPartner"
-            :data="program"
-            :key="program.id"
-          />
+        <option
+          v-for="item in PartnerList"
+          :value="item.id"
+          :selected="PartnerId == item.id"
+        >
+          {{ item.name }}
+        </option>
+      </select>
+      <div v-if="dataLoad == 'success'">
+        <div class="flex flex-col items-center gap-2 leading-none mb-6">
+          <h1 class="line-none">{{ data.PartnerDetail.name }}</h1>
+          <span class="italic line-none">{{ data.PartnerDetail.chief }}</span>
         </div>
-        <div class="primeBox w-full h-full">
-          <div class="font-bold px-2">Program tambahan</div>
-          <div class="flex flex-col justify-start gap-2 p-2">
+        <div class="flex flex-col gap-2 px-4">
+          <div class="primeBox w-full p-2 gap-2 flex flex-col">
+            <div class="font-bold">Program Rapimnas</div>
+            <!-- {{ ProgramPartner }} -->
+
             <div
               class="buttonAdd"
-              @click.prevent="() => navigateTo('/tracker/project/add/')"
+              @click.prevent="() => navigateTo('/tracker/assignment/add/')"
             >
-              + Program tambahan diluar rapimnas
+              <p class="">+ Program</p>
             </div>
-            <!-- {{ data.ProjectsNonProgram }} -->
-            <div class="flex gap-2">
+            <CardsProgramDetail
+              v-for="program in data.ProgramPartner"
+              :data="program"
+              :key="program.id"
+            />
+          </div>
+          <div class="primeBox w-full h-full">
+            <div class="font-bold px-2">Program tambahan</div>
+            <div class="flex flex-col justify-start gap-2 p-2">
               <div
-                v-for="project in data.ProjectsNonProgram"
-                class="md:w-[23vw] w-screen"
-                :key="project.id"
+                class="buttonAdd"
+                @click.prevent="() => navigateTo('/tracker/project/add/')"
               >
-                <!-- {{ project }} -->
-                <CardsMiniProject
-                  :ProjectId="project.id"
-                  :title="project.title"
-                  :projectCategory="project.Category.name"
-                  :startDate="project.start"
-                  :endDate="project.end"
-                  :sinergy="project.Partners"
-                  :logoId="project.image && project.id"
-                />
+                + Program tambahan diluar rapimnas
+              </div>
+              <!-- {{ data.ProjectsNonProgram }} -->
+              <div class="flex gap-2">
+                <div
+                  v-for="project in data.ProjectsNonProgram"
+                  class="md:w-[23vw] w-screen"
+                  :key="project.id"
+                >
+                  <!-- {{ project }} -->
+                  <CardsMiniProject
+                    :ProjectId="project.id"
+                    :title="project.title"
+                    :projectCategory="project.Category.name"
+                    :startDate="project.start"
+                    :endDate="project.end"
+                    :sinergy="project.Partners"
+                    :logoId="project.image && project.id"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="primeBox w-full h-full">
+            <div class="font-bold px-2">
+              Aktifitas pengurus Kadin diluar Program
+            </div>
+            <div class="flex flex-col justify-start gap-2 p-2">
+              <div
+                class="buttonAdd"
+                @click.prevent="() => navigateTo('/tracker/activity/add/')"
+              >
+                + Aktifitas diluar Program
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <div
+                  v-for="activity in data.listActivities"
+                  :key="activity.id"
+                  :class="`cursor-pointer w-[23vw]`"
+                >
+                  <CardsMiniActivity :activity="activity" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="primeBox w-full h-full">
-          <div class="font-bold px-2">
-            Aktifitas pengurus Kadin diluar Program
-          </div>
-          <div class="flex flex-col justify-start gap-2 p-2">
-            <div
-              class="buttonAdd"
-              @click.prevent="() => navigateTo('/tracker/activity/add/')"
-            >
-              + Aktifitas diluar Program
-            </div>
-            <div class="flex gap-2 flex-wrap">
-              <div
-                v-for="activity in data.listActivities"
-                :key="activity.id"
-                :class="`cursor-pointer w-[23vw]`"
-              >
-                <CardsMiniActivity :activity="activity" />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
 
-    <div v-if="dataLoad == 'pending'">
-      <div class="text-secondary w-full flex justify-center items-center">
-        <div class="w-[25%]">
-          <IconsLoading />
+      <div v-if="dataLoad == 'pending'">
+        <div class="text-secondary w-full flex justify-center items-center">
+          <div class="w-[25%]">
+            <IconsLoading />
+          </div>
         </div>
       </div>
     </div>
@@ -106,7 +109,6 @@
 </template>
 <script setup>
 import { BASE_URL } from "~/constants/urls.js";
-import { INSTITUTION_ID } from "~/constants/ids.js";
 import { watch } from "vue";
 import { useRoute } from "vue-router";
 import pmoAPI from "~/composables/rest-api";

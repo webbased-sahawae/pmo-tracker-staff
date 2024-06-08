@@ -1,5 +1,5 @@
 // export const BASE_URL = "https://server-pmo-tracker.projectmehvish.com";
-// export const BASE_URL = "http://192.168.1.44:3001";
+// export const BASE_URL = "http://192.168.0.83:3001";
 export const BASE_URL = "http://localhost:3001";
 export const KADIN_LOGO =
   "https://kadin.id/wp-content/uploads/Kadin-Logo-tanpa-text-1.png";
