@@ -218,6 +218,8 @@
 </template>
 
 <script setup>
+import useICookie from "~/composables/cookie";
+import { SYSTEM_PRIVILEGE } from "~/constants/ids";
 import { BASE_URL } from "~/constants/urls";
 
 const { trace } = useTrace();
@@ -235,6 +237,10 @@ const createActivity = async () => {
       method: "post",
       body: data,
       watch: false,
+      headers: {
+        access_token: useICookie.get("access_token"),
+        UserLevelId: SYSTEM_PRIVILEGE,
+      },
     });
 
     if (!error.value) useRouter().back();

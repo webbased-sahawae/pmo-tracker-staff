@@ -5,29 +5,6 @@
         <label class="text-xl font-bold">
           {{ PartnerDetail?.name }}
         </label>
-
-        <!-- <div class="flex flex-col">
-          <div class="flex gap-2">
-            <div class="flex items-center">Project Status:</div>
-            <div :class="`${projectStatus(project.project.status).text}`">
-              [{{ project.project.status }}]
-              {{ projectStatus(project.project.status).title }}
-            </div>
-          </div>
-          <input
-            type="range"
-            min="1"
-            max="100"
-            class="md:w-[25vw]"
-            :class="`${projectStatus(project.project.status).BarColor} p-0`"
-            :value="project.project.status ? project.project.status : 0"
-            @change="
-              (e) => {
-                project.project.status = e.target.value;
-              }
-            "
-          />
-        </div> -->
       </div>
       <div class="flex w-[50vw] justify-around gap-2">
         <div
@@ -86,7 +63,6 @@
         class="flex flex-col p-2 h-[75vh] xl:p-10 py-5 w-[100vw] xl:w-[50vw]"
       >
         <div class="h-[80vh] overflow-y-auto">
-          <!-- {{ activeTab }} -->
           <FormsProjectInfo v-if="activeTab == 'info'" />
           <FormsProjectBackground v-if="activeTab == 'background'" />
           <FormsProjectRundown v-if="activeTab == 'ProjectRundown'" />
@@ -94,15 +70,6 @@
           <FormsProjectProgramRelation v-if="activeTab == 'kpi'" />
         </div>
         <div>
-          <!-- {{ stayPage }} -->
-          <!-- <div
-            @click.prevent="stayPage = !stayPage"
-            class="cursor-pointer"
-            v-if="project?.project?.id"
-          >
-            <input type="checkbox" :checked="stayPage" />
-            Stay on this page after submit
-          </div> -->
           <div class="flex max-w-[100vw] gap-4">
             <button
               :disabled="
@@ -148,13 +115,24 @@
         </div>
       </div>
     </div>
-
-    {{ project }}
   </div>
 </template>
 <script setup>
 import { warn } from "vue";
+import useICookie from "~/composables/cookie";
+import { SYSTEM_PRIVILEGE } from "~/constants/ids";
 import { BASE_URL } from "~/constants/urls";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+
+const toastMessage = (severity, code, message) => {
+  toast.add({
+    severity,
+    summary: code,
+    detail: message,
+    life: 10000,
+  });
+};
 const { trace } = useTrace();
 const { project } = useProject();
 project.value.PartnerId = trace.value.PartnerId;
@@ -173,22 +151,42 @@ const setTab = (valInput) => {
 };
 
 const submitProject = async () => {
-  if (
-    project.value.project.title &&
-    project.value.project.start &&
-    project.value.project.end &&
-    project.value.project.CategoryId
-  ) {
-    const { data: responseData } = await useFetch(`${BASE_URL}/project`, {
-      method: "post",
-      body: project.value,
-      watch: false,
-    });
+  try {
+    if (
+      project.value.project.title &&
+      project.value.project.start &&
+      project.value.project.end &&
+      project.value.project.CategoryId
+    ) {
+      const { data: responseData, error } = await useFetch(
+        `${BASE_URL}/project`,
+        {
+          method: "post",
+          body: project.value,
+          watch: false,
+          headers: {
+            access_token: useICookie.get("access_token"),
+            UserLevelId: SYSTEM_PRIVILEGE,
+          },
+        }
+      );
 
-    await navigateTo({
-      path: "/tracker/assignment",
-      query: { PartnerId: trace.value.PartnerId },
-    });
+      toastMessage(
+        "success",
+        200,
+        project.value.project.id
+          ? `${project.value.project.title} has been updated!`
+          : `${project.value.project.title} has been created!`
+      );
+
+      if (error.value) throw error.value;
+      await navigateTo({
+        path: "/tracker/assignment",
+        query: { PartnerId: trace.value.PartnerId },
+      });
+    }
+  } catch (error) {
+    toastMessage("error", error.statusCode, error.statusMessage);
   }
 };
 const resetStateProject = () => {
@@ -209,30 +207,6 @@ const resetStateProject = () => {
     Sinergy: [],
     ProjectIndicators: [],
   };
-};
-
-const projectStatus = (value) => {
-  if (value > 80)
-    return {
-      BarColor: "accent-complete",
-      title: "Very Impactful",
-      text: "text-complete",
-      border: "border-complete",
-    };
-  else if (value > 40)
-    return {
-      BarColor: "accent-ongoing",
-      text: "text-ongoing",
-      title: "Highly Impactful",
-      border: "border-ongoing",
-    };
-  else
-    return {
-      BarColor: "accent-stop",
-      text: "text-stop",
-      title: "Impactful",
-      border: "border-stop",
-    };
 };
 
 onBeforeUnmount(() => {

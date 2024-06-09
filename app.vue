@@ -1,6 +1,7 @@
 <template>
   <div>
     <NuxtPage />
+    <PrimeToast />
   </div>
 </template>
 <style>
@@ -20,15 +21,6 @@ h1 {
 h2 {
   font-weight: 800;
   font-size: medium;
-}
-button {
-  padding: 2px;
-  border-radius: 10px;
-  border-width: 5px;
-  color: aquamarine;
-}
-button:hover {
-  background-color: blue;
 }
 
 .buttonAdd {

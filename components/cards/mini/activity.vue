@@ -14,6 +14,7 @@
         <div
           class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-stop hover:border-x-red-700 hover:text-white hover:font-bold"
           @click="editActivity"
+          v-if="trace.PartnerId"
         >
           Edit
         </div>
@@ -30,6 +31,7 @@
         <div
           class="border-2 border-x-slate-500 rounded-full px-2 hover:bg-stop hover:border-x-red-700 hover:text-white hover:font-bold"
           @click="deleteActivity"
+          v-if="trace.PartnerId"
         >
           Delete
         </div>
@@ -100,16 +102,21 @@
 <script setup>
 const { activity } = defineProps(["activity"]);
 const { activity: activityDetail } = useActivity();
+const { trace } = useTrace();
 
 import { BASE_URL } from "~/constants/urls";
 import { dates } from "~/helpers/get-date.js";
 const activityModal = ref(false);
 const { ProjectId } = useRoute().params;
 const editActivity = async () => {
-  activityDetail.value.info = activity;
-  delete activityDetail.value.info.Discussions;
-  activityDetail.value.Discussions = activity.Discussions || [];
-  await navigateTo("/tracker/activity/edit");
+  try {
+    activityDetail.value.info = activity;
+    delete activityDetail.value.info.Discussions;
+    activityDetail.value.Discussions = activity.Discussions || [];
+    await navigateTo("/tracker/activity/edit");
+  } catch (error) {
+    console.log(error);
+  }
   // console.log(activityDetail.value.info);
 };
 
@@ -120,6 +127,7 @@ const deleteActivity = async () => {
     activityModal.value = false;
     await refreshNuxtData();
   } catch (error) {
+    // toastMessage('error',error)
     console.log(error);
   }
 };

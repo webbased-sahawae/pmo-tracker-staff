@@ -3,12 +3,12 @@ import useICookie from "./cookie";
 import { SYSTEM_PRIVILEGE } from "~/constants/ids";
 
 export default class pmoAPI {
-  static async getWithAccess(url) {
+  static async getWithAccess() {
     try {
       // console.log("asdsad");
       // console.log(BASE_URL + url);
       // console.log(useICookie.get("access_token"));
-      const result = await useFetch(BASE_URL + url, {
+      const result = await useFetch(BASE_URL + "/user/google", {
         headers: {
           access_token: useICookie.get("access_token"),
           UserLevelId: SYSTEM_PRIVILEGE,

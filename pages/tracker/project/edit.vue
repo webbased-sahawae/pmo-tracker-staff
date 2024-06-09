@@ -5,10 +5,7 @@
         {{ PartnerDetail?.name }}
       </Title>
     </Head>
-    <!-- {{ PartnerDetail?.name }} -->
-    <!-- {{ trace }} -->
-    <!-- {{ ProjectDetail.Partners }} -->
-    <!-- {{ project }} -->
+
     <FormsProject />
   </div>
 </template>

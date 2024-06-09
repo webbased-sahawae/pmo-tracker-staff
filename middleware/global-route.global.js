@@ -32,7 +32,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         // console.log(data);
         if (error.value) throw error.value;
       } catch (error) {
-        // console.log("global error");
+        console.log("global error");
+        console.log(error);
         await useICookie.delete("access_token");
         return await navigateTo("/login");
       }

@@ -14,6 +14,19 @@
           "
         />
       </div>
+      <div class="flex flex-col">
+        <label>Project Folder URL</label
+        ><input
+          class="px-2"
+          placeholder="Project Folder URL"
+          :value="project.project.folderUrl"
+          @keyup="
+            (e) => {
+              project.project.folderUrl = e.target.value;
+            }
+          "
+        />
+      </div>
 
       <div class="flex flex-col">
         <label>Venue</label

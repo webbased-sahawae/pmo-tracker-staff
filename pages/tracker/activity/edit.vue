@@ -189,12 +189,24 @@
         </div>
       </div>
     </div>
-    {{ activity }}
   </div>
 </template>
 
 <script setup>
 import { BASE_URL } from "~/constants/urls";
+import useICookie from "~/composables/cookie";
+import { SYSTEM_PRIVILEGE } from "~/constants/ids";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+
+const toastMessage = (severity, code, message) => {
+  toast.add({
+    severity,
+    summary: code,
+    detail: message,
+    life: 10000,
+  });
+};
 
 const { trace } = useTrace();
 const { activity } = useActivity();
@@ -216,7 +228,7 @@ activity.value.info.end = `${activity.value.info.end.split("T")[0]}T${new Date(
 const createActivity = async () => {
   try {
     const data = { ...trace.value, ...activity.value };
-    console.log(data);
+    // console.log(data);
     const {
       data: responseData,
       status,
@@ -225,11 +237,24 @@ const createActivity = async () => {
       method: "post",
       body: data,
       watch: false,
+      headers: {
+        access_token: useICookie.get("access_token"),
+        UserLevelId: SYSTEM_PRIVILEGE,
+      },
     });
-
-    if (!error.value) useRouter().back();
+    if (error.value) throw error.value;
+    toastMessage(
+      "success",
+      200,
+      activity.value.info.id
+        ? `${activity.value.info.title} has been updated!`
+        : `${activity.value.info.title} has been created!`
+    );
+    await navigateTo(`/tracker/project/${trace.value.ProjectId}`);
   } catch (error) {
     console.log(error);
+    toastMessage("error", error.statusCode, error.statusMessage);
+    // console.log(Object.keys(error));
   }
 };
 

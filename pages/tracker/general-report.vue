@@ -97,6 +97,14 @@
               }`"
               >{{ institutionActive.programPercentage }}%</span
             >
+            <span class="text-xs font-bold text-blue">{{
+              institutionActive.quarter == "all"
+                ? `Status Program dari 1 Januari ${new Date().getFullYear()} sampai ${new Date().toLocaleDateString(
+                    "id-ID",
+                    { day: "2-digit", month: "long", year: "numeric" }
+                  )}`
+                : ""
+            }}</span>
             <span
               :class="`font-bold text-base italic ${
                 projectStatus(institutionActive.programPercentage).text
@@ -105,34 +113,6 @@
                 projectStatus(institutionActive.programPercentage).title
               }}</span
             >
-            <!-- <div class="flex gap-2 justify-center px-2 w-full">
-              <div class="flex flex-col leading-none items-center w-full">
-                <span class="text-nowrap"
-                  ><span class="text-xl font-bold text-stop">10</span> Project
-                </span>
-                <span class="italic w-full text-center text-stop"
-                  >Impactful</span
-                >
-              </div>
-              <div class="flex flex-col leading-none items-center w-full">
-                <span class="text-nowrap"
-                  ><span class="text-xl font-bold text-ongoing">20</span>
-                  Project
-                </span>
-                <span class="italic w-full text-center text-ongoing"
-                  >Highly Impactful</span
-                >
-              </div>
-              <div class="flex flex-col leading-none items-center w-full">
-                <span class="text-nowrap"
-                  ><span class="text-xl font-bold text-complete">20</span>
-                  Project
-                </span>
-                <span class="italic w-full text-center text-complete"
-                  >Very Impactful</span
-                >
-              </div>
-            </div> -->
           </div>
         </div>
         <div
@@ -159,22 +139,53 @@
           <h2 class="border-b-2 border-b-dprimary w-full flex justify-center">
             Sinergy Recap
           </h2>
-          <div class="p-2 w-full text-black">
-            <table class="w-full table-auto">
-              <tbody>
-                <tr
-                  v-for="institution in institutionList.filter(
-                    (el) => el.id != institutionActive.id
-                  )"
+          <div class="p-2 w-full text-black flex flex-col gap-2">
+            <div v-for="(institution, index) in sinergyRecap">
+              <p>
+                {{ index + 1 }}. Bersinergi dengan
+                <b class="text-blue"
+                  >{{ institution.TotalPartner }}
+                  {{
+                    institution.id == "14a870b2-6f40-4120-9c3f-2d7c2379442d"
+                      ? "Bidang/Badan"
+                      : institution.name
+                  }}</b
                 >
+                sebanyak
+                <b class="text-dsecondary hover:text-black duration-1000"
+                  >{{ institution.TotalSinergy }} kali</b
+                >
+                dalam
+                <b class="text-dsecondary hover:text-black duration-1000"
+                  >{{ institution.TotalProject }} Program</b
+                >
+              </p>
+            </div>
+            <!-- <table class="w-full table-auto">
+              <thead>
+                <tr>
+                  <th>Jumlah Sinergi</th>
+                  <th>Jumlah Program</th>
+                  <th>Jumlah Bidang/Badan/Lembaga</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="institution in dataSinergy">
                   <td>
                     {{ institution.name }}
                   </td>
-                  <td>:</td>
-                  <td>{{ Math.floor(Math.random() * (20 - 10 + 1) + 10) }}</td>
+                  <td>
+                    {{ institution.TotalSinergy }}
+                  </td>
+                  <td>
+                    {{ institution.TotalProject }}
+                  </td>
+                  <td>
+                    {{ institution.TotalPartner }}
+                  </td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
           </div>
         </div>
       </div>
@@ -182,7 +193,7 @@
         <div
           class="col-span-6 rounded-2xl border-4 border-dprimary flex flex-col items-center text-dprimary"
         >
-          <div class="flex w-full gap-4 px-4 border-b-2 border-b-dprimary">
+          <!-- <div class="flex w-full gap-4 px-4 border-b-2 border-b-dprimary">
             <div
               :class="`hover:border-y-dprimary border-y-transparent border-y-2 w-fit flex justify-center hover:font-bold cursor-pointer uppercase duration-500 ${
                 detailTab == 'activities' && 'font-bold text-dsecondary'
@@ -215,7 +226,7 @@
             >
               Departments
             </div>
-          </div>
+          </div> -->
           <div class="h-full overflow-hidden h-max">
             <GeneralReportActivities
               v-if="detailTab == 'activities'"
@@ -246,20 +257,45 @@ const institutionActive = ref({
   quarter: "all",
   programPercentage: 0,
 });
-const { data: institutionList, status } = await useFetch(
-  `${BASE_URL}/institution`
+const sinergyRecap = ref({});
+
+const { data: rawRecap, status: rawRecapStatus } = await useFetch(
+  `${BASE_URL}/institution/recap/${institutionActive.value.id}`,
+  {
+    query: {
+      quarter: institutionActive.value.quarter,
+      year: new Date().getFullYear(),
+    },
+  }
 );
 
-const { data: rawRecap } = await useFetch(
-  `${BASE_URL}/institution/recap/${institutionActive.value.id}`,
-  { query: { quarter: institutionActive.value.quarter, year: "2024" } }
+const { data: dataSinergy } = await useFetch(
+  `${BASE_URL}/institution/sinergy`,
+  {
+    query: {
+      quarter: institutionActive.value.quarter,
+      year: new Date().getFullYear(),
+    },
+  }
 );
+sinergyRecap.value = dataSinergy.value;
 institutionActive.value.programPercentage = rawRecap.value;
-recapStatus.value.status = status.value;
+recapStatus.value.status = rawRecapStatus.value;
 watch(institutionActive.value, async () => {
   try {
     console.log(institutionActive.value);
     recapStatus.value.status = "pending";
+
+    const { data: dataSinergy } = await useFetch(
+      `${BASE_URL}/institution/sinergy`,
+      {
+        query: {
+          quarter: institutionActive.value.quarter,
+          year: new Date().getFullYear(),
+        },
+      }
+    );
+    sinergyRecap.value = dataSinergy.value;
 
     const {
       data: rawRecap,

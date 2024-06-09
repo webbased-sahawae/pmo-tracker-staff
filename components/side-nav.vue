@@ -1,5 +1,15 @@
 <template>
   <div class="py-4 rounded-se-2xl bg-dprimary flex flex-col h-full w-full">
+    <div class="p-4 w-full">
+      <div class="text-primary text-sm mb-2 flex gap-2 w-full">
+        <img :src="user.picture" class="rounded-full" width="75" />
+        <div>
+          <div>{{ user.name }}</div>
+          <div class="text-xs italic truncate w-full">{{ user.email }}</div>
+          <div @click="navigateTo('/login')" class="cursor-pointer">Logout</div>
+        </div>
+      </div>
+    </div>
     <div
       class="text-nowrap text-secondary cursor-pointer border-y-dprimary hover:text-primary hover:border-y-[#FFF] duration-1000 border-y-2 px-4"
       @click="
@@ -34,3 +44,8 @@
     </div>
   </div>
 </template>
+<script setup>
+import pmoAPI from "../composables/rest-api";
+
+const { data: user } = await pmoAPI.getWithAccess();
+</script>

@@ -2,7 +2,8 @@
 // import routes from "./data/routes.json";
 
 export default defineNuxtConfig({
-  modules: ["nuxt-vue3-google-signin"],
+  ssr: false,
+  modules: ["nuxt-vue3-google-signin", "nuxt-primevue"],
   googleSignIn: {
     clientId:
       "643210795718-odgaolru40pcotuainctvues1kakfm1g.apps.googleusercontent.com",
@@ -13,11 +14,17 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  css: ["~/assets/css/main.css"],
+  css: [
+    "~/assets/css/main.css",
+    "primevue/resources/themes/aura-light-green/theme.css",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  primevue: {
+    components: { prefix: "Prime", include: ["Toast", "Button"] },
   },
 });

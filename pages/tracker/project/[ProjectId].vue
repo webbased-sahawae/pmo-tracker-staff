@@ -100,17 +100,22 @@
                   }}
                 </div>
                 <div
+                  v-if="ProjectDetail.folderUrl"
                   class="flex items-center mt-1 gap-1 cursor-pointer hover:font-bold"
                   @click="
-                    () => {
-                      navigateTo('www.google.com');
+                    async () => {
+                      await navigateTo(ProjectDetail.folderUrl, {
+                        open: {
+                          target: '_blank',
+                        },
+                      });
                     }
                   "
                 >
                   <img
-                    src="https://mailmeteor.com/logos/assets/PNG/Google_Drive_Logo_512px.png"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYvVAUxzhs2ny4F3YwVq8RQt9aXOFURbu6Ug&s"
                     class="h-4 object-conatain"
-                  />Drive
+                  />Folder File
                 </div>
               </div>
             </div>

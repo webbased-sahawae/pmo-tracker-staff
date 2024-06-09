@@ -20,6 +20,8 @@
         Sekretariat Kadin Indonesia
       </div>
     </div>
+    <PrimeButton label="Error" severity="danger" @click="toastMessage" />
+
     <GoogleSignInButton
       @success="handleLoginSuccess"
       @error="handleLoginError"
@@ -32,7 +34,18 @@ import { GoogleSignInButton } from "vue3-google-signin";
 import useICookie from "~/composables/cookie";
 import pmoAPI from "~/composables/rest-api";
 import { SYSTEM_DESCRIPTION, SYSTEM_NAME } from "~/constants/ids";
-import { BASE_URL } from "~/constants/urls";
+
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+
+const toastMessage = (severity, code, message) => {
+  toast.add({
+    severity,
+    summary: code,
+    detail: message,
+    life: 10000,
+  });
+};
 
 useSeoMeta({
   title: `${SYSTEM_NAME} ${new Date().getFullYear()}`,
@@ -48,26 +61,32 @@ useSeoMeta({
 const handleLoginSuccess = async (response) => {
   try {
     const { credential } = response;
-    const { data: access_token, error } = await pmoAPI.login(credential);
+    const { data: login_data, error } = await pmoAPI.login(credential);
+    if (error?.value?.statusCode) throw error.value;
     console.log(
       "================================================================"
     );
-    console.log(access_token.value);
+    console.log(login_data.value);
     console.log(
       "================================================================"
     );
-    await useICookie.set("access_token", access_token.value);
-    console.log("error" + error.value);
+    toastMessage(
+      "success",
+      "Login Success",
+      `Login as ${login_data.value.name}`
+    );
+
+    await useICookie.set("access_token", login_data.value.access_token);
     await navigateTo({
       path: "/tracker/general-report",
     });
   } catch (error) {
-    console.log(error);
+    toastMessage("error", error.statusCode, error.statusMessage);
   }
 };
 
 // handle an error event
 const handleLoginError = () => {
-  console.error("Login failed");
+  toastMessage("error");
 };
 </script>

@@ -84,6 +84,7 @@ import { useRoute } from "vue-router";
 const { PartnerId } = useRoute().query;
 const { trace } = useTrace();
 delete trace.value.ProjectId;
+delete trace.value.PartnerId;
 const data = ref({
   ProgramPartner: [],
   listActivities: [],

@@ -37,8 +37,10 @@ const sendFile = async () => {
       body: formData,
     });
     emit("setModal", false);
+
     // navigateTo(`/tracker/project/${ProjectId}`);
     // window.location.reload(true);
+    reloadNuxtApp();
     // console.log("move");
   } catch (error) {
     console.log(error);
