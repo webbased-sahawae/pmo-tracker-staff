@@ -241,12 +241,10 @@
   </div>
 </template>
 <script setup>
-import {
-  INSTITUTION_ID,
-  SYSTEM_DESCRIPTION,
-  SYSTEM_NAME,
-} from "~/constants/ids";
-import { BASE_URL } from "~/constants/urls";
+import { SYSTEM_DESCRIPTION, SYSTEM_NAME } from "~/constants/ids";
+const { BASE_URL } = useRuntimeConfig().public;
+
+const { INSTITUTION_ID } = useRuntimeConfig().public;
 const { trace } = useTrace("trace");
 trace.value = {};
 const recapStatus = ref({ status: "pending", error: null });

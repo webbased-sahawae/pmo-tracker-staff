@@ -39,7 +39,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 
 let { apiRoute, setValue, titleField, descriptionField } = defineProps([
   "apiRoute",

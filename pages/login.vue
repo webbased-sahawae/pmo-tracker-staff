@@ -20,7 +20,6 @@
         Sekretariat Kadin Indonesia
       </div>
     </div>
-    <PrimeButton label="Error" severity="danger" @click="toastMessage" />
 
     <GoogleSignInButton
       @success="handleLoginSuccess"
@@ -34,8 +33,9 @@ import { GoogleSignInButton } from "vue3-google-signin";
 import useICookie from "~/composables/cookie";
 import pmoAPI from "~/composables/rest-api";
 import { SYSTEM_DESCRIPTION, SYSTEM_NAME } from "~/constants/ids";
-
 import { useToast } from "primevue/usetoast";
+
+// console.log(useRuntimeConfig().public);
 const toast = useToast();
 
 const toastMessage = (severity, code, message) => {

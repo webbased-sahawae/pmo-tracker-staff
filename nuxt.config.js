@@ -27,4 +27,9 @@ export default defineNuxtConfig({
   primevue: {
     components: { prefix: "Prime", include: ["Toast", "Button"] },
   },
+  runtimeConfig: {
+    public: {
+      ...process.env,
+    },
+  },
 });

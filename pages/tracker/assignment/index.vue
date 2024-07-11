@@ -36,11 +36,13 @@
             >
               <p class="">+ Program</p>
             </div>
-            <CardsProgramDetail
-              v-for="program in data.ProgramPartner"
-              :data="program"
-              :key="program.id"
-            />
+            <div>
+              <CardsProgramDetail
+                v-for="program in data.ProgramPartner"
+                :data="program"
+                :key="program.id"
+              />
+            </div>
           </div>
           <div class="primeBox w-full h-full">
             <div class="font-bold px-2">Program tambahan</div>
@@ -52,10 +54,10 @@
                 + Program tambahan diluar rapimnas
               </div>
               <!-- {{ data.ProjectsNonProgram }} -->
-              <div class="flex gap-2">
+              <div class="flex flex-wrap gap-2">
                 <div
                   v-for="project in data.ProjectsNonProgram"
-                  class="md:w-[23vw] w-screen"
+                  class="md:w-[19vw] w-screen"
                   :key="project.id"
                 >
                   <!-- {{ project }} -->
@@ -108,10 +110,10 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls.js";
 import { watch } from "vue";
 import { useRoute } from "vue-router";
 import pmoAPI from "~/composables/rest-api";
+const { BASE_URL } = useRuntimeConfig().public;
 const { data: PartnerList } = await pmoAPI.assignment();
 const { PartnerId } = useRoute().query;
 const { trace } = useTrace();

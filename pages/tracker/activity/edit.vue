@@ -193,10 +193,10 @@
 </template>
 
 <script setup>
-import { BASE_URL } from "~/constants/urls";
 import useICookie from "~/composables/cookie";
-import { SYSTEM_PRIVILEGE } from "~/constants/ids";
 import { useToast } from "primevue/usetoast";
+const { BASE_URL } = useRuntimeConfig().public;
+const { SYSTEM_PRIVILEGE } = useRuntimeConfig().public;
 const toast = useToast();
 
 const toastMessage = (severity, code, message) => {

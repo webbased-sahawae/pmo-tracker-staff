@@ -49,9 +49,8 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL, KADIN_LOGO } from "~/constants/urls";
-import { dates } from "~/helpers/get-date.js";
-const activityModal = ref(false);
+import { KADIN_LOGO } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 const queryTime = ref("all");
 const { ProjectId } = useRoute().params;
 

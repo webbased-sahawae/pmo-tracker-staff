@@ -21,7 +21,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 
 const { UserId } = defineProps(["UserId"]);
 const { data: user, status } = await useFetch(`${BASE_URL}/user/${UserId}`);

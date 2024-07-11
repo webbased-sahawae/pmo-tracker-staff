@@ -16,7 +16,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 
 const { PartnerId } = defineProps(["PartnerId"]);
 const { data: partner, status } = await useFetch(

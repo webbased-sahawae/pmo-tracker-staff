@@ -92,10 +92,9 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls.js";
-import { INSTITUTION_ID } from "~/constants/ids.js";
-import { watch } from "vue";
 import { useRoute } from "vue-router";
+import { watch } from "vue";
+const { BASE_URL, INSTITUTION_ID } = useRuntimeConfig().public;
 const { PartnerId } = useRoute().query;
 const { trace } = useTrace();
 const data = ref({

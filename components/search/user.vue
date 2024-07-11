@@ -41,8 +41,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
-import { uniqueArrayWithFilter } from "~/helpers/array.js";
+const { BASE_URL } = useRuntimeConfig().public;
 
 const { setValue } = defineProps(["setValue"]);
 const search = ref("");

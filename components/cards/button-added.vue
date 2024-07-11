@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 
 const { FieldId, field } = defineProps(["FieldId", "field"]);
 const { data: partner, status } = await useFetch(

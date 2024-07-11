@@ -1,6 +1,5 @@
 import useICookie from "~/composables/cookie";
 import pmoAPI from "~/composables/rest-api";
-import { BASE_URL } from "~/constants/urls";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const nuxtApp = useNuxtApp();

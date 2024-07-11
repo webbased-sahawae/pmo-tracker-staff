@@ -80,8 +80,8 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL, KADIN_LOGO } from "~/constants/urls";
-
+import { KADIN_LOGO } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 const projectStatus = (value) => {
   if (value > 80)
     return {

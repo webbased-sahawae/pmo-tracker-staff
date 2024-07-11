@@ -120,9 +120,10 @@
 <script setup>
 import { warn } from "vue";
 import useICookie from "~/composables/cookie";
-import { SYSTEM_PRIVILEGE } from "~/constants/ids";
-import { BASE_URL } from "~/constants/urls";
 import { useToast } from "primevue/usetoast";
+const { SYSTEM_PRIVILEGE } = useRuntimeConfig().public;
+const { BASE_URL } = useRuntimeConfig().public;
+
 const toast = useToast();
 
 const toastMessage = (severity, code, message) => {
@@ -171,6 +172,7 @@ const submitProject = async () => {
         }
       );
 
+      if (error.value) throw error.value;
       toastMessage(
         "success",
         200,
@@ -179,7 +181,6 @@ const submitProject = async () => {
           : `${project.value.project.title} has been created!`
       );
 
-      if (error.value) throw error.value;
       await navigateTo({
         path: "/tracker/assignment",
         query: { PartnerId: trace.value.PartnerId },

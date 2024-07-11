@@ -19,7 +19,7 @@
       </option>
     </select>
     <div class="flex flex-col items-center gap-2 leading-none mb-6">
-      <h1 class="line-none">{{ data.PartnerDetail.name }}</h1>
+      <h1 class="line-none">{{ data.PartnerDetail?.name }}</h1>
       <span class="italic line-none">{{ data.PartnerDetail.chief }}</span>
     </div>
     <div class="flex flex-col gap-2 px-4">
@@ -37,10 +37,10 @@
         <div class="font-bold px-2">Program tambahan</div>
         <div class="flex flex-col justify-start gap-2 p-2">
           <!-- {{ data.ProjectsNonProgram }} -->
-          <div class="flex gap-2">
+          <div class="flex flex-wrap gap-2">
             <div
               v-for="project in data.ProjectsNonProgram"
-              class="md:w-[23vw] w-screen"
+              class="md:w-[19vw] w-screen"
               :key="project.id"
             >
               <!-- {{ project }} -->
@@ -77,10 +77,10 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls.js";
-import { INSTITUTION_ID } from "~/constants/ids.js";
 import { watch } from "vue";
 import { useRoute } from "vue-router";
+const { BASE_URL } = useRuntimeConfig().public;
+const { INSTITUTION_ID } = useRuntimeConfig().public;
 const { PartnerId } = useRoute().query;
 const { trace } = useTrace();
 delete trace.value.ProjectId;

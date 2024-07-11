@@ -368,7 +368,7 @@
 </template>
 <script setup>
 import { uniqueArray } from "~/helpers/array.js";
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 const { trace } = useTrace();
 const stayPage = ref(true);
 

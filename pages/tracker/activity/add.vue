@@ -219,8 +219,18 @@
 
 <script setup>
 import useICookie from "~/composables/cookie";
-import { SYSTEM_PRIVILEGE } from "~/constants/ids";
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
+const { SYSTEM_PRIVILEGE } = useRuntimeConfig().public;
+const toast = useToast();
+
+const toastMessage = (severity, code, message) => {
+  toast.add({
+    severity,
+    summary: code,
+    detail: message,
+    life: 10000,
+  });
+};
 
 const { trace } = useTrace();
 const { activity } = useActivity();
@@ -242,10 +252,17 @@ const createActivity = async () => {
         UserLevelId: SYSTEM_PRIVILEGE,
       },
     });
-
-    if (!error.value) useRouter().back();
+    toastMessage(
+      "success",
+      responseData.statusCode,
+      ProjectDetail.value.title + "has been created!"
+    );
+    await navigateTo({
+      path: "/tracker/project/" + trace.value.ProjectId,
+    });
+    if (error.value) throw error.value;
   } catch (error) {
-    console.log(error);
+    toastMessage("error", error.statusCode, error.statusMessage);
   }
 };
 

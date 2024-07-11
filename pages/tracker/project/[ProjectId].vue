@@ -269,7 +269,19 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL, KADIN_LOGO } from "~/constants/urls";
+import { KADIN_LOGO } from "~/constants/urls";
+import { useToast } from "primevue/usetoast";
+const { BASE_URL } = useRuntimeConfig().public;
+const toast = useToast();
+
+const toastMessage = (severity, code, message) => {
+  toast.add({
+    severity,
+    summary: code,
+    detail: message,
+    life: 10000,
+  });
+};
 
 const { trace } = useTrace();
 const { ProjectId } = useRoute().params;
@@ -350,13 +362,16 @@ const projectStatus = () => {
 
 const deleteProject = async () => {
   try {
-    await useFetch(`${BASE_URL}/project/${ProjectId}`, {
+    const { error } = await useFetch(`${BASE_URL}/project/${ProjectId}`, {
       method: "delete",
       watch: false,
     });
-    await navigateTo(`/tracker/assignment/${trace.value.PartnerId}`);
+    if (error.value) throw error.value;
+
+    toastMessage("info", "Delete", "Project has been deleted!");
+    await navigateTo(`/tracker/assignment?PartnerId=${trace.value.PartnerId}`);
   } catch (error) {
-    console.log(error);
+    toastMessage("error", error.statusCode, error.statusMessage);
   }
 };
 const { data: institutionList, status } = await useFetch(

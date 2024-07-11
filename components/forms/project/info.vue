@@ -106,7 +106,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 
 const { project } = useProject();
 

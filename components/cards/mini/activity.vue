@@ -100,12 +100,12 @@
   </div>
 </template>
 <script setup>
+import { dates } from "~/helpers/get-date.js";
 const { activity } = defineProps(["activity"]);
 const { activity: activityDetail } = useActivity();
 const { trace } = useTrace();
 
-import { BASE_URL } from "~/constants/urls";
-import { dates } from "~/helpers/get-date.js";
+const { BASE_URL } = useRuntimeConfig().public;
 const activityModal = ref(false);
 const { ProjectId } = useRoute().params;
 const editActivity = async () => {

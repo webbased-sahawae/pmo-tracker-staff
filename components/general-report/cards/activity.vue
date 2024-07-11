@@ -40,8 +40,8 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
 import { dates } from "~/helpers/get-date";
+const { BASE_URL } = useRuntimeConfig().public;
 const { data } = defineProps(["data"]);
 const image = ref(false);
 
@@ -62,7 +62,7 @@ if (data.Project?.id) {
 
 // console.log(data.summary);
 const isNotComplete = () => {
-  if (!data.summary && new Date(data.start) < new Date())
+  if (!data.summary && new Date(data.end) < new Date())
     return { class: "border-pred text-pred items-center", isTrue: true };
 };
 </script>

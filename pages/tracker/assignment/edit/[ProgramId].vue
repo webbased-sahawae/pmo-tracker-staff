@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup>
-import { BASE_URL } from "~/constants/urls";
+const { BASE_URL } = useRuntimeConfig().public;
 const { dataProgram } = useProgram();
 const { ProgramId } = useRoute().params;
 const { data } = await useFetch(`${BASE_URL}/program/${ProgramId}`);
